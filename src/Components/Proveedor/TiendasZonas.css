@@ -1,0 +1,177 @@
+.tz-page {
+  display: grid;
+  gap: 24px;
+}
+
+.tz-helper {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--bd);
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-elev) 88%, transparent);
+}
+
+.tz-helper__label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.tz-helper__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tz-helper__actions {
+  margin-top: 10px;
+}
+
+.tz-table-wrap {
+  padding: 0 24px 24px;
+}
+
+.tz-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.tz-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--bd);
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+}
+
+.tz-table th,
+.tz-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--bd);
+}
+
+.tz-table th {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tz-table td {
+  color: var(--ink);
+}
+
+.tz-table td:last-child {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.tz-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tz-table__empty,
+.tz-table__error {
+  margin: 0;
+  padding: 24px 0 0;
+}
+
+.tz-table__empty {
+  color: var(--muted);
+}
+
+.tz-table__error {
+  color: #ff9d9d;
+  font-weight: 600;
+}
+
+.tz-action-btn {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.tz-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.tz-action-btn--danger {
+  background: color-mix(in oklab, #c62828 14%, var(--surface-elev));
+  border-color: color-mix(in oklab, #c62828 46%, var(--bd));
+  color: #a61b1b;
+}
+
+.tz-action-btn--danger:hover {
+  background: color-mix(in oklab, #c62828 20%, var(--surface-elev));
+  color: #8e1414;
+}
+
+.tz-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.tz-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, #08111f 58%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.tz-modal__content {
+  position: relative;
+  z-index: 1;
+  width: min(900px, 100%);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+}
+
+.tz-modal-card {
+  border-radius: 28px;
+}
+
+.tz-modal-close {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--bd);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface-elev) 88%, transparent);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tz-btn-secondary {
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+  color: var(--ink);
+  border: 1px solid var(--bd);
+}
+
+@media (max-width: 860px) {
+  .tz-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .tz-modal {
+    padding: 12px;
+  }
+}

@@ -1,0 +1,114 @@
+.correo-modal {
+  width: min(960px, 100%);
+  max-height: calc(100vh - 48px);
+}
+
+.correo-modal .ntk-card {
+  border-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  overflow: hidden;
+}
+
+.correo-modal .ntk-card__header {
+  flex-shrink: 0;
+}
+
+.correo-modal .ntk-form {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.correo-modal__close {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--bd);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface-elev) 88%, transparent);
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.correo-modal__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.correo-modal__grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.correo-modal__textarea {
+  min-height: 220px;
+  padding: 14px;
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  background: var(--field-bg);
+  color: var(--ink);
+  resize: vertical;
+  outline: none;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.correo-modal__textarea:focus {
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--bd));
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+.correo-modal__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.correo-modal__chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 24%, var(--bd));
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.correo-modal__dropzone {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px dashed color-mix(in oklab, var(--primary) 28%, var(--bd));
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+}
+
+.correo-modal__dropzone-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.correo-modal__dropzone-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.correo-modal__secondary {
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+  color: var(--ink);
+  border: 1px solid var(--bd);
+}
+
+@media (max-width: 860px) {
+  .correo-modal__grid--2 {
+    grid-template-columns: 1fr;
+  }
+}

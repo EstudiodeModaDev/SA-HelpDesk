@@ -1,0 +1,32 @@
+.tz-page {
+  display: grid;
+  gap: 24px;
+}
+
+.tz-helper {
+  display: grid;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--bd);
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-elev) 88%, transparent);
+}
+
+.tz-helper__label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.tz-helper__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.tz-helper__actions {
+  margin-top: 10px;
+}

@@ -1,0 +1,408 @@
+/* =========================================================
+   NUEVO TICKET — CARD / SECCIONES
+   ========================================================= */
+
+.ntk-card {
+  background:
+    radial-gradient(900px 280px at 0% 0%, color-mix(in oklab, var(--brand-400) 12%, transparent) 0%, transparent 60%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--surface-elev) 90%, transparent) 0%,
+      var(--surface) 100%
+    );
+  border: 1px solid var(--bd);
+  border-radius: var(--radius-3xl);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.ntk-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid var(--bd);
+  background:
+    radial-gradient(700px 240px at 0% 0%, color-mix(in oklab, var(--brand-400) 14%, transparent) 0%, transparent 65%),
+    linear-gradient(180deg, color-mix(in oklab, var(--surface-elev) 95%, transparent), transparent);
+}
+
+.ntk-card__header-copy {
+  min-width: 0;
+}
+
+.ntk-card__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 28%, var(--bd));
+  background: color-mix(in oklab, var(--primary) 12%, transparent);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.ntk-card__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(22px, 2vw, 30px);
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.ntk-card__subtitle {
+  margin: 8px 0 0;
+  max-width: 780px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ntk-card__status {
+  flex-shrink: 0;
+}
+
+.ntk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 26%, var(--bd));
+  background: color-mix(in oklab, var(--primary) 10%, transparent);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ntk-badge.is-loading::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.ntk-form {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+}
+
+.ntk-section {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--bd);
+  border-radius: calc(var(--radius) + 2px);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--surface-elev) 88%, transparent),
+      color-mix(in oklab, var(--surface) 98%, transparent)
+    );
+}
+
+.ntk-section__head {
+  display: grid;
+  gap: 4px;
+}
+
+.ntk-section__title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.ntk-section__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ntk-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.ntk-grid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ntk-grid--align-start {
+  align-items: start;
+}
+
+.ntk-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.ntk-label {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ntk-input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  background: var(--field-bg);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.ntk-input::placeholder {
+  color: var(--muted);
+}
+
+.ntk-input:focus {
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--bd));
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+.ntk-input:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   EDITOR
+   ========================================================= */
+
+.ntk-editor-wrap {
+  padding: 12px;
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  background: var(--field-bg);
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.ntk-editor-wrap:focus-within {
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--bd));
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+.ntk-field.has-error .ntk-editor-wrap {
+  border-color: rgba(239, 68, 68, .55);
+}
+
+/* =========================================================
+   ANS
+   ========================================================= */
+
+.ntk-ans-card {
+  display: grid;
+  gap: 10px;
+  min-height: 96px;
+  padding: 14px;
+  border: 1px solid color-mix(in oklab, var(--primary) 20%, var(--bd));
+  border-radius: 16px;
+  background:
+    radial-gradient(320px 120px at 0% 0%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in oklab, var(--surface-elev) 88%, transparent), color-mix(in oklab, var(--surface) 98%, transparent));
+}
+
+.ntk-ans-card__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, var(--bd));
+  background: color-mix(in oklab, var(--primary) 14%, transparent);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.ntk-ans-card__meta {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.ntk-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding-top: 6px;
+  border-top: 1px solid var(--bd);
+}
+
+.ntk-actions__meta {
+  min-width: 0;
+}
+
+.ntk-actions__text {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.ntk-actions__buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ntk-btn {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease, opacity .16s ease;
+}
+
+.ntk-btn:hover {
+  transform: translateY(-1px);
+}
+
+.ntk-btn:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.ntk-btn--primary {
+  background: linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 82%, black));
+  color: var(--primary-ink);
+  box-shadow: 0 10px 22px color-mix(in oklab, var(--primary) 22%, transparent);
+}
+
+.ntk-btn--primary:hover {
+  box-shadow: 0 14px 28px color-mix(in oklab, var(--primary) 28%, transparent);
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.ntk-error {
+  color: #ff9d9d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   REACT-SELECT AJUSTES VISUALES
+   ========================================================= */
+
+.rs__control {
+  min-height: 48px !important;
+  border-radius: 14px !important;
+  border: 1px solid var(--bd) !important;
+  background: var(--field-bg) !important;
+  box-shadow: none !important;
+}
+
+.rs__control--is-focused {
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--bd)) !important;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 16%, transparent) !important;
+}
+
+.rs__value-container {
+  padding: 4px 12px !important;
+}
+
+.rs__input-container,
+.rs__single-value,
+.rs__placeholder {
+  color: var(--ink) !important;
+}
+
+.rs__placeholder {
+  color: var(--muted) !important;
+}
+
+.rs__menu {
+  background: var(--surface-elev) !important;
+  border: 1px solid var(--bd) !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+  box-shadow: var(--shadow) !important;
+}
+
+.rs__option {
+  background: transparent !important;
+  color: var(--ink) !important;
+}
+
+.rs__option--is-focused {
+  background: color-mix(in oklab, var(--primary) 10%, transparent) !important;
+}
+
+.rs__option--is-selected {
+  background: color-mix(in oklab, var(--primary) 18%, transparent) !important;
+  color: var(--ink) !important;
+}
+
+.rs__indicator-separator {
+  background: var(--bd) !important;
+}
+
+.rs__dropdown-indicator,
+.rs__clear-indicator {
+  color: var(--muted) !important;
+}
+
+.rs__dropdown-indicator:hover,
+.rs__clear-indicator:hover {
+  color: var(--ink) !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 860px) {
+  .ntk-card__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ntk-grid--2 {
+    grid-template-columns: 1fr;
+  }
+
+  .ntk-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ntk-actions__buttons {
+    width: 100%;
+  }
+
+  .ntk-btn--primary {
+    width: 100%;
+  }
+}

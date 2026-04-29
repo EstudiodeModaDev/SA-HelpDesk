@@ -1,0 +1,97 @@
+.msb-layout{
+  display:grid;
+  gap:18px;
+  min-width:0;
+}
+
+.msb{
+  padding:8px;
+  border:1px solid var(--bd);
+  border-radius:26px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--surface-elev) 92%, transparent), color-mix(in oklab, var(--surface) 96%, transparent));
+  box-shadow:var(--shadow-soft);
+}
+
+.msb-track{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:max-content;
+  gap:10px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+  scrollbar-color:var(--sb-thumb) transparent;
+}
+
+.msb-item{
+  appearance:none;
+  min-inline-size:110px;
+  padding:8px 12px;
+  border:1px solid var(--bd);
+  border-radius:18px;
+  background:color-mix(in oklab, var(--surface-elev) 90%, transparent);
+  color:var(--ink);
+  cursor:pointer;
+  transition:transform .12s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.msb-item:hover{
+  transform:translateY(-1px);
+  border-color:color-mix(in oklab, var(--primary) 26%, var(--bd));
+}
+
+.msb-item__inner{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-block-size:72px;
+}
+
+.msb-icon{
+  inline-size:40px;
+  block-size:40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--sb-bg-2) 84%, transparent), color-mix(in oklab, var(--brand-700) 86%, transparent));
+  box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--bd) 60%, transparent);
+}
+
+.msb-icon img,
+.msb-icon svg{
+  max-inline-size:70%;
+  max-block-size:70%;
+  object-fit:contain;
+}
+
+.msb-label{
+  text-align:center;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.1;
+}
+
+.msb-item.is-active{
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--primary) 12%, var(--surface-elev)), color-mix(in oklab, var(--primary) 7%, var(--surface)));
+  border-color:color-mix(in oklab, var(--primary) 54%, var(--bd));
+  box-shadow:0 0 0 3px color-mix(in oklab, var(--ring) 76%, transparent);
+}
+
+@media (max-width: 720px){
+  .msb-item{
+    min-inline-size:96px;
+    padding:8px 10px;
+  }
+
+  .msb-item__inner{
+    min-block-size:64px;
+  }
+
+  .msb-icon{
+    inline-size:34px;
+    block-size:34px;
+  }
+}

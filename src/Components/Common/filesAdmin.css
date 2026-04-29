@@ -1,0 +1,50 @@
+.documentar-files {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.documentar-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--bd, #dcdfe4);
+  border-radius: 10px;
+  background: var(--surface-2, #f8f9fb);
+}
+
+.documentar-file-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.documentar-file-name {
+  font-weight: 600;
+  color: var(--ink, #1f2937);
+  word-break: break-word;
+}
+
+.documentar-file-size {
+  font-size: 12px;
+  color: var(--muted, #6b7280);
+}
+
+.documentar-file-remove {
+  border: none;
+  background: #dc2626;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.documentar-file-remove:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

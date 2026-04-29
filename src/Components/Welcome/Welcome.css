@@ -1,0 +1,150 @@
+:root{
+  --welcome-shell: min(1180px, calc(100vw - 48px));
+}
+
+.solvi-auth{
+  min-height:100dvh;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:20px;
+  padding:24px;
+  background:var(--page-bg);
+  color:var(--ink);
+  box-sizing:border-box;
+}
+
+.solvi-left,
+.solvi-right{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--bd);
+  border-radius:32px;
+  box-shadow:var(--shadow);
+}
+
+.solvi-left{
+  display:grid;
+  align-content:center;
+  background:
+    radial-gradient(900px 420px at 0% 0%, color-mix(in oklab, var(--brand-400) 18%, transparent), transparent 60%),
+    radial-gradient(700px 400px at 70% 20%, color-mix(in oklab, var(--primary) 14%, transparent), transparent 64%),
+    linear-gradient(140deg, color-mix(in oklab, var(--sb-bg-2) 82%, #160d08), color-mix(in oklab, var(--surface) 84%, #090d11));
+}
+
+.solvi-left::after{
+  content:"";
+  position:absolute;
+  inset:auto -10% -18% auto;
+  width:340px;
+  height:340px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.1), transparent 65%);
+}
+
+.solvi-left__inner{
+  width:min(720px, 100%);
+  padding:56px;
+  display:grid;
+  gap:18px;
+}
+
+.brand{
+  margin:0;
+  font-size:clamp(40px, 5.8vw, 74px);
+  line-height:.92;
+  letter-spacing:-.05em;
+  color:#fff9f4;
+}
+
+.tagline{
+  margin:0;
+  max-width:54ch;
+  color:rgba(255,249,244,.76);
+  font-size:16px;
+  line-height:1.7;
+}
+
+.solvi-right{
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--surface-elev) 92%, transparent), color-mix(in oklab, var(--surface) 96%, transparent)),
+    var(--surface);
+}
+
+.solvi-right__inner{
+  width:min(460px, 88%);
+  display:grid;
+  gap:18px;
+  padding:40px 0;
+}
+
+.welcome{
+  display:grid;
+  gap:8px;
+}
+
+.welcome .kicker{
+  color:var(--primary);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+
+.welcome .title{
+  margin:0;
+  font-size:clamp(30px, 4vw, 44px);
+  line-height:1;
+}
+
+.welcome .subtitle{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.btn-primary{
+  appearance:none;
+  border:1px solid color-mix(in oklab, var(--primary) 72%, var(--bd));
+  border-radius:16px;
+  min-height:54px;
+  padding:0 18px;
+  background:linear-gradient(180deg, var(--primary), color-mix(in oklab, var(--primary) 84%, black));
+  color:var(--primary-ink);
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 18px 28px color-mix(in oklab, var(--primary) 18%, transparent);
+  transition:transform .14s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 22px 36px color-mix(in oklab, var(--primary) 24%, transparent);
+  filter:saturate(1.03);
+}
+
+.btn-primary:active{ transform:translateY(1px); }
+
+.footer{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+@media (max-width: 960px){
+  .solvi-auth{
+    grid-template-columns:1fr;
+    padding:16px;
+  }
+
+  .solvi-left__inner{
+    padding:32px 28px;
+  }
+
+  .solvi-right__inner{
+    width:min(540px, 90%);
+    padding:28px 0;
+  }
+}

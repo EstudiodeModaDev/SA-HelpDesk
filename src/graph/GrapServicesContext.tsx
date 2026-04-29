@@ -15,6 +15,9 @@ import { TicketsBibliotecaAttachmentsService } from "../services/Bibliotecas.ser
 import { SeguimientosAttachmentsService } from "../services/SeguimentosAttachments.service";
 import { TiendaZonaService, } from "../services/TiendasZonas.Service";
 import { ProveedorService } from "../services/Proveedor.service";
+import { TicketHelpdeskService } from "../services/TicketsHelpdesk.Service";
+import type { LogHelpdesk } from "../Models/HelpDesk";
+import { LogHelpDeskService } from "../services/LogHeldesk.service";
 
 
 /* ================== Tipos de config ================== */
@@ -47,6 +50,8 @@ export type GraphServices = {
   seguimientosAttachments: SeguimientosAttachmentsService;
   tiendasZonas: TiendaZonaService
   proveedor: ProveedorService
+  ticketHelpDesk: TicketHelpdeskService
+  logHelpDesk: LogHelpDeskService
 };
 
 /* ================== Contexto ================== */
@@ -114,9 +119,11 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
     const seguimientosAttachments = new SeguimientosAttachmentsService(graph)
     const tiendasZonas            = new TiendaZonaService(graph)
     const proveedor               = new ProveedorService(graph)
+    const ticketHelpDesk         = new TicketHelpdeskService(graph,)
+    const logHelpDesk         = new LogHelpDeskService(graph,)
 
     return {
-      graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
+      logHelpDesk, ticketHelpDesk, graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
 
     };
   }, [graph, cfg]);

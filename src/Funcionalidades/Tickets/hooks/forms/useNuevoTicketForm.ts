@@ -14,7 +14,6 @@ import { logTicketCreated } from "../../../Log/utils/ticketsLogs";
 import { notifyTicketCreatedResolutor, notifyTicketCreatedSolicitante } from "../../utils/notifications";
 import type { SubCategoria } from "../../../../Models/Categorias";
 import { increaseResolverCaseCount, } from "../../utils/ticketAssignment";
-import { useAuth } from "../../../../Auth/authContext";
 import { useFiles } from "../../../Commons/hooks/useFiles";
 import { useTicketsAttachmentsList } from "../../../Attachments/Tickets-Attachments/hooks/useActions";
 
@@ -44,7 +43,7 @@ export function useNuevoTicketForm() {
   const graph = useGraphServices();
   const attachmentsList = useTicketsAttachmentsList()
   const files = useFiles()
-  const {account} = useAuth()
+
   const [state, setState] = React.useState<Ticket>(initialState);
   const [errors, setErrors] = React.useState<TicketErrors>({});
   const [submitting, setSubmitting] = React.useState(false);
@@ -79,7 +78,7 @@ export function useNuevoTicketForm() {
         setFechaSolucion(solucion);
       }
 
-      const payload = await buildNuevoTicketPayload(state, ANS, apertura, solucion, account, graph.Usuarios);
+      const payload = await buildNuevoTicketPayload(state, ANS, apertura, solucion, graph.Usuarios);
  
       const created = await graph.Tickets.create(payload);
       if (!created?.ID) {

@@ -53,7 +53,7 @@ export type NavSection = {
 const SECTIONS: NavSection[] = [
   { id: "workspace", title: "Operacion", subtitle: "Flujo diario" },
   { id: "analysis", title: "Control", subtitle: "Indicadores" },
-  { id: "admin", title: "Gobierno", subtitle: "ConfiguraciÃ³n" },
+  { id: "admin", title: "Gobierno", subtitle: "Configuración" },
 ];
 
 function isVisible(node: MenuItem, ctx: NavContext): boolean {
@@ -196,7 +196,7 @@ function LoggedApp({ user }: { user: User }) {
 
   return (
     <div className={`workspace layout ${collapsed ? "is-collapsed" : ""}`}>
-      <Sidebar selected={selected} onSelect={handleSelect} user={user} collapsed={collapsed} onToggle={toggleCollapsed} sections={SECTIONS} />
+      <Sidebar selected={selected} onSelect={handleSelect} user={user} collapsed={collapsed} onToggle={toggleCollapsed} sections={SECTIONS} items={filterdNavs} />
       <main className="workspace-main">
         <div className="workspace-stage">
           <HeaderPrincipal item={item} toogleTheme={toggle} theme={theme} user={auth.account} logOut={auth.signOut}/>

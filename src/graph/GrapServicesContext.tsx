@@ -16,7 +16,6 @@ import { SeguimientosAttachmentsService } from "../services/SeguimentosAttachmen
 import { TiendaZonaService, } from "../services/TiendasZonas.Service";
 import { ProveedorService } from "../services/Proveedor.service";
 import { TicketHelpdeskService } from "../services/TicketsHelpdesk.Service";
-import type { LogHelpdesk } from "../Models/HelpDesk";
 import { LogHelpDeskService } from "../services/LogHeldesk.service";
 
 

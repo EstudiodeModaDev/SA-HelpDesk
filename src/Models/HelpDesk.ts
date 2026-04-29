@@ -42,7 +42,7 @@ export type FormState = {
   subcategoria: string;
   articulo: string;
   archivo: File | null;
-  ANS?: "";
+  ANS?: string;
 };
 
 export type FormErrors = Partial<Record<keyof FormState, string>>;

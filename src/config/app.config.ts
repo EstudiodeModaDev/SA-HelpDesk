@@ -6,7 +6,7 @@ export const APP_CONFIG = {
 
   sharePointGroups: {
     resolutores: "SA-TICKETS-RESOLUTOR",
-    administradores: "SA-TICKETS-ADMINISTRADOR",
+    administradores: "SA-TICKETS-ADMINISTRADOR", 
     usuarios: "SA - Tickets"
   },
 } as const;

@@ -27,7 +27,6 @@ export type SiteConfig = {
 
 export type UnifiedConfig = {
   sa: SiteConfig;    // sitio principal (HD)
-  test: SiteConfig;  // sitio de pruebas (Paz y salvos)
 };
 
 /* ================== Tipos del contexto ================== */
@@ -62,10 +61,6 @@ const DEFAULT_CONFIG: UnifiedConfig = {
     hostname: "estudiodemoda.sharepoint.com",
     sitePath: "/sites/TransformacionDigital/IN/SA",
   },
-  test: {
-    hostname: "estudiodemoda.sharepoint.com",
-    sitePath: "/sites/TransformacionDigital/IN/Test",
-  },
 };
 
 /* ================== Provider ================== */
@@ -88,12 +83,8 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
       sitePath: normPath(config?.sa?.sitePath ?? base.sa.sitePath),
     };
 
-    const test: SiteConfig = {
-      hostname: config?.test?.hostname ?? base.test.hostname,
-      sitePath: normPath(config?.test?.sitePath ?? base.test.sitePath),
-    };
 
-    return { sa, test, };
+    return { sa, };
   }, [config]);
 
   // Cliente Graph

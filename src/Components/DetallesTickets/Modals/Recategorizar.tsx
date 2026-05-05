@@ -82,6 +82,7 @@ export default function RecategorizarTicket({ ticket, onDone }: Props) {
       e.preventDefault();
 
       if (!value) {
+        console.log("Not value")
         setErrors({ categoria: "Seleccione una categoría." });
         return;
       }

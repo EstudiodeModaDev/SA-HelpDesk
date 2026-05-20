@@ -9,14 +9,22 @@ export function proveedorMailInitialState(ticket: Ticket): correoState {
     correo: "",
     para: "",
     mensaje: `
-      Estimado equipo,</br>
-      Por medio del presente correo, se realiza el escalamiento del siguiente ticket, el cual requiere su pronta intervención:</br>
+      Estimado equipo,</br></br>
+
+      Por medio del presente correo, se realiza el escalamiento del siguiente ticket, el cual requiere de su pronta intervención:</br>
+
       <ul>
-        <li><strong>Lugar que requiere acción: ${ticket.Title}</strong></li>
-        <li><strong>Categoría del daño: ${ticket.Categoria} > ${ticket.SubCategoria}</strong></li>
-        <li><strong>Descripción del daño: ${ticket.Descripcion}</strong></li>
+        <li><strong>ID del caso:</strong> ${ticket.ID}</li>
+        <li><strong>Lugar que requiere atención:</strong> ${ticket.Title}</li>
+        <li><strong>Categoría del daño:</strong> ${ticket.Categoria} > ${ticket.SubCategoria}</li>
+        <li><strong>Descripción del daño:</strong> ${ticket.Descripcion}</li>
+        <li><strong>ANS del caso:</strong> ${ticket.ANS}</li>
+        <li><strong>Fecha límite de ejecución:</strong> ${ticket.TiempoSolucion}</li>
       </ul>
 
-    Agradecemos su apoyo en la validación y pronta gestión de este caso. Quedamos atentos a cualquier información adicional que requieran.`,
+      Por favor, confirmar la fecha estimada de visita a la tienda para la atención del caso.</br></br>
+
+      Agradecemos su apoyo en la validación y pronta gestión de esta solicitud. Quedamos atentos a cualquier información adicional que requieran.
+    `,
   };
 }

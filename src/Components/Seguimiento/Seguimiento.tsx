@@ -18,6 +18,9 @@ type Props = {
   onAddClick: () => void
 };
 
+/**
+ * Muestra el historial de acciones de un ticket y habilita el cambio a modo documentar.
+ */
 export default function TicketHistorial({ticketId, defaultTab = "solucion", className, ticket, onAddClick}: Props) {
   const {engine} = usePermissions()
   const [tab, setTab] = React.useState<Tab>(defaultTab);

@@ -3,6 +3,9 @@ import { useFranquiciasData } from "./useFranquiciasData";
 import { useFranquiciasForm } from "./useFranquiciasForm";
 import type { FranquiciasService } from "../../../services/Franquicias.service";
 
+/**
+ * Combina el CRUD de franquicias con su estado de formulario y listado remoto.
+ */
 export function useFranquicias(FranquiciasSvc: FranquiciasService) {
   const data = useFranquiciasData(FranquiciasSvc);
   const form = useFranquiciasForm();

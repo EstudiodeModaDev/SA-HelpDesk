@@ -9,6 +9,12 @@ import { notifyClosedSolicitante } from "../../Tickets/utils/notifications";
 import { useFiles } from "../../Commons/hooks/useFiles";
 import { useSeguimientosAttachmentsList } from "../../Attachments/Seguimientos-Attachments/hooks/useActions";
 
+/**
+ * Orquesta el flujo de documentacion de un ticket.
+ *
+ * Registra soluciones o seguimientos, adjunta evidencias y dispara acciones derivadas
+ * como cierre de caso y notificaciones al solicitante.
+ */
 export function useDocumentarTicket() {
   const graph= useGraphServices();
   const form = useDocumentarTicketForm();

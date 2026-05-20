@@ -5,6 +5,9 @@ import { useGraphServices } from "../../../graph/GrapServicesContext";
 import { mapFormToPlantillaPayload } from "../utils/templatesMapper";
 
 
+/**
+ * Compone la lectura y creacion de plantillas reutilizables para correos o documentacion.
+ */
 export function usePlantillas() {
   const graph = useGraphServices()
   const data = usePlantillasData();

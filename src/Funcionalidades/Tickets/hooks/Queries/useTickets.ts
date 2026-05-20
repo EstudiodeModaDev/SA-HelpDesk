@@ -10,6 +10,12 @@ import { useFiles } from "../../../Commons/hooks/useFiles";
 import { buildTicketsReportFilter } from "../../utils/ticketsFilters";
 import { usePermissions } from "../../../usePermissions";
 
+/**
+ * Orquesta la bandeja principal de tickets.
+ *
+ * Expone filtros, ordenamiento, paginacion, metricas rapidas y acciones auxiliares
+ * como relacionar tickets, agregar observador y preparar datos para reportes.
+ */
 export function useTickets() {
   const auth = useAuth()
   const graph = useGraphServices();

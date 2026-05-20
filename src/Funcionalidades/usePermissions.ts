@@ -17,6 +17,9 @@ const EMPTY_ENGINE: PermissionsEngine = {
   list: () => [],
 };
 
+/**
+ * Carga los grupos SharePoint del usuario actual y construye el motor de permisos de UI.
+ */
 export function usePermissions() {
   const [engine, setEngine] = React.useState<PermissionsEngine>(EMPTY_ENGINE);
   const [loading, setLoading] = React.useState(true);

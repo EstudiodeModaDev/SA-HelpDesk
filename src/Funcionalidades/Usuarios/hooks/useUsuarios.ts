@@ -5,6 +5,9 @@ import type { UsuariosSPService } from "../../../services/Usuarios.service";
 import type { UsuariosSP } from "../../../Models/Usuarios";
 import { isUsuarioValid, validateUsuario } from "../utils/UsersValidation";
 
+/**
+ * Combina consulta, formulario y acciones CRUD del catalogo de usuarios.
+ */
 export function useUsuarios(usuariosSvc: UsuariosSPService) {
   const data = useUsuariosData(usuariosSvc);
   const form = useUsuariosForm();

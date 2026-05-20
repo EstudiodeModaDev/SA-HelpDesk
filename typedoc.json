@@ -1,0 +1,20 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src"],
+  "entryPointStrategy": "expand",
+  "tsconfig": "tsconfig.app.json",
+  "out": "docs/api",
+  "exclude": [
+    "**/*.css",
+    "**/*.svg",
+    "**/*.png",
+    "**/*.txt"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "categorizeByGroup": false,
+  "sort": ["source-order"],
+  "readme": "README.md",
+  "projectDocuments": ["docs/technical/source-map.md"]
+}

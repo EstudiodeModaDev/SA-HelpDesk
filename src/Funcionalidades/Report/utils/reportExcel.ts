@@ -3,11 +3,16 @@ import type { Ticket } from "../../../Models/Tickets";
 import { calculateComplianceMetrics } from "./reportMetric";
 import { buildTicketsData } from "./convertDataToExcel";
 
-function appendSheet<T extends Record<string, unknown>>(wb: XLSX.WorkBook,
+function appendSheet<T extends Record<string, unknown>>(
+  wb: XLSX.WorkBook,
   sheetName: string,
   data: T[]
 ) {
-  const ws = XLSX.utils.json_to_sheet(data);
+  const safeData =
+    data.length > 0
+      ? data
+      : ([{ Mensaje: "Sin datos para este criterio" }] as unknown as T[]);
+  const ws = XLSX.utils.json_to_sheet(safeData);
   XLSX.utils.book_append_sheet(wb, ws, sheetName);
 }
 
@@ -28,11 +33,11 @@ export function exportComplianceReportToExcel(
     { Indicador: "Cerrados sin fechas", Valor: metrics.closedWithoutDates },
     { Indicador: "Abiertos vencidos", Valor: metrics.openOverdue },
     { Indicador: "Abiertos dentro de tiempo", Valor: metrics.openWithinTime },
-    { Indicador: "Abiertos sin fecha máxima", Valor: metrics.openWithoutDates },
+    { Indicador: "Abiertos sin fecha maxima", Valor: metrics.openWithoutDates },
   ];
 
   const tecnicos = metrics.byTecnico.map((x) => ({
-    Técnico: x.tecnico,
+    Tecnico: x.tecnico,
     Total: x.total,
     Cerrados: x.closed,
     "A tiempo": x.onTime,
@@ -41,7 +46,16 @@ export function exportComplianceReportToExcel(
   }));
 
   const categorias = metrics.byCategoria.map((x) => ({
-    Categoría: x.categoria,
+    Categoria: x.categoria,
+    Total: x.total,
+    Cerrados: x.closed,
+    "A tiempo": x.onTime,
+    "Fuera de tiempo": x.late,
+    "% cumplimiento": `${x.compliancePct}%`,
+  }));
+
+  const proveedores = metrics.byProveedor.map((x) => ({
+    Proveedor: x.proveedor,
     Total: x.total,
     Cerrados: x.closed,
     "A tiempo": x.onTime,
@@ -52,8 +66,9 @@ export function exportComplianceReportToExcel(
   const wb = XLSX.utils.book_new();
 
   appendSheet(wb, "Resumen", resumen);
-  appendSheet(wb, "Por técnico", tecnicos);
-  appendSheet(wb, "Por categoría", categorias);
+  appendSheet(wb, "Por tecnico", tecnicos);
+  appendSheet(wb, "Por categoria", categorias);
+  appendSheet(wb, "Por proveedor", proveedores);
   appendSheet(wb, "Detalle tickets", detail);
 
   XLSX.writeFile(wb, opts?.fileName ?? "ReporteCumplimientoTickets.xlsx");

@@ -42,6 +42,18 @@ export const navs: MenuItem[] = [
     permission: [PERMISSIONS.VIEW_TICKETS, PERMISSIONS.VIEW_ALL_TICKETS],
   },
   {
+    id: "helpdeskform",
+    label: "HelpDesk",
+    section: "workspace",
+    icon:
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24">
+        <path fill="#000000" d="M4 4h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-5.17L12 20.83L9.17 16H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v8h6.34L12 16.83L13.66 14H20V6zm2 2h12v2H6zm0 3h8v2H6z"/>
+      </svg>,
+    path: "/helpdesk/nuevo",
+    autocollapse: true,
+    permission: [PERMISSIONS.CREATE_TICKETS],
+  },
+  {
     id: "reports",
     label: "Cumplimiento",
     section: "analysis",

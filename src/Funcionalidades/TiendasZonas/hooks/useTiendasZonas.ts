@@ -3,6 +3,9 @@ import { useGraphServices } from "../../../graph/GrapServicesContext";
 import { useTiendasZonasData } from "./useUsuariosData";
 import { useTiendaZonaForm } from "./useUsuariosForm";
 
+/**
+ * Agrupa el listado, las opciones y el alta de espacios fisicos o tiendas por zona.
+ */
 export function useTiendasZonas() {
   const graph = useGraphServices()
   const data = useTiendasZonasData();

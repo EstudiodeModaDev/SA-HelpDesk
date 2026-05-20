@@ -15,20 +15,30 @@ import { TicketsBibliotecaAttachmentsService } from "../services/Bibliotecas.ser
 import { SeguimientosAttachmentsService } from "../services/SeguimentosAttachments.service";
 import { TiendaZonaService, } from "../services/TiendasZonas.Service";
 import { ProveedorService } from "../services/Proveedor.service";
+import { TicketHelpdeskService } from "../services/TicketsHelpdesk.Service";
+import { LogHelpDeskService } from "../services/LogHeldesk.service";
 
 
 /* ================== Tipos de config ================== */
+/**
+ * Define la ubicacion de un sitio SharePoint consumido por la aplicacion.
+ */
 export type SiteConfig = {
   hostname: string;
   sitePath: string; // Debe iniciar con '/'
 };
 
+/**
+ * Agrupa la configuracion de sitios requerida por los servicios de negocio.
+ */
 export type UnifiedConfig = {
   sa: SiteConfig;    // sitio principal (HD)
-  test: SiteConfig;  // sitio de pruebas (Paz y salvos)
 };
 
 /* ================== Tipos del contexto ================== */
+/**
+ * Conjunto de servicios compartidos construidos sobre Microsoft Graph y SharePoint.
+ */
 export type GraphServices = {
   graph: GraphRest;
 
@@ -47,6 +57,8 @@ export type GraphServices = {
   seguimientosAttachments: SeguimientosAttachmentsService;
   tiendasZonas: TiendaZonaService
   proveedor: ProveedorService
+  ticketHelpDesk: TicketHelpdeskService
+  logHelpDesk: LogHelpDeskService
 };
 
 /* ================== Contexto ================== */
@@ -58,10 +70,6 @@ const DEFAULT_CONFIG: UnifiedConfig = {
     hostname: "estudiodemoda.sharepoint.com",
     sitePath: "/sites/TransformacionDigital/IN/SA",
   },
-  test: {
-    hostname: "estudiodemoda.sharepoint.com",
-    sitePath: "/sites/TransformacionDigital/IN/Test",
-  },
 };
 
 /* ================== Provider ================== */
@@ -70,6 +78,9 @@ type ProviderProps = {
   config?: Partial<UnifiedConfig>;
 };
 
+/**
+ * Inicializa el cliente Graph y las fachadas de acceso a datos disponibles en la app.
+ */
 export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, config }) => {
   const { getToken } = useAuth();
 
@@ -84,12 +95,8 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
       sitePath: normPath(config?.sa?.sitePath ?? base.sa.sitePath),
     };
 
-    const test: SiteConfig = {
-      hostname: config?.test?.hostname ?? base.test.hostname,
-      sitePath: normPath(config?.test?.sitePath ?? base.test.sitePath),
-    };
 
-    return { sa, test, };
+    return { sa, };
   }, [config]);
 
   // Cliente Graph
@@ -114,9 +121,11 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
     const seguimientosAttachments = new SeguimientosAttachmentsService(graph)
     const tiendasZonas            = new TiendaZonaService(graph)
     const proveedor               = new ProveedorService(graph)
+    const ticketHelpDesk         = new TicketHelpdeskService(graph,)
+    const logHelpDesk         = new LogHelpDeskService(graph,)
 
     return {
-      graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
+      logHelpDesk, ticketHelpDesk, graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
 
     };
   }, [graph, cfg]);
@@ -129,6 +138,9 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
 };
 
 /* ================== Hook de consumo ================== */
+/**
+ * Expone el conjunto de servicios registrados por {@link GraphServicesProvider}.
+ */
 export function useGraphServices(): GraphServices {
   const ctx = React.useContext(GraphServicesContext);
   if (!ctx) throw new Error("useGraphServices debe usarse dentro de <GraphServicesProvider>.");

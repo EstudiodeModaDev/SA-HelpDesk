@@ -7,7 +7,7 @@ export class TicketsService extends BaseSharePointListService<Ticket> {
     super(
       graph,
       "estudiodemoda.sharepoint.com",
-      "/sites/TransformacionDigital/IN/Test",
+      "/sites/TransformacionDigital/IN/SA",
       "SA - Tickets"
     );
   }

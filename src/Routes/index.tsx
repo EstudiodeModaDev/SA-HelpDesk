@@ -7,6 +7,7 @@ import CrearPlantilla from "../Components/NuevaPlantilla/NuevaPlantilla";
 import UsuariosApp from "../Components/Security/PermisosApp/PermisosApp";
 import TiendasZonasForm from "../Components/TiendasZonas/TiendasZonas";
 import Proveedor from "../Components/Proveedor/Proveedor";
+import HelpDeskForm from "../Components/HelpDesk/HelpDesk";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path="/home" element={<DashBoardPage/>} />
       <Route path="/tickets/nuevo" element={<NuevoTicketForm/>} />
       <Route path="/tickets" element={<TablaTickets/>} />
+      <Route path="/helpdesk/nuevo" element={<HelpDeskForm/>} />
       <Route path="/metrics" element={<TicketsComplianceReport/>} />
       <Route path="/templates" element={<CrearPlantilla />} />
       <Route path="/access" element={<UsuariosApp />} />

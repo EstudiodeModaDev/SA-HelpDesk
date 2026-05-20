@@ -2,11 +2,10 @@ import type { Ticket } from "../../../Models/Tickets";
 import type { TZDate } from "@date-fns/tz";
 import { toGraphDateTime } from "../../../utils/Date";
 import { ESTADO_EN_ATENCION } from "./ticketConstants";
-import type { AccountInfo } from "@azure/msal-browser";
 import { pickTecnicoConMenosCasos } from "./ticketAssignment";
 import type { UsuariosSPService } from "../../../services/Usuarios.service";
 
-export async function buildNuevoTicketPayload(state: Ticket, ans: string, apertura: Date, solucion: TZDate | Date | null, userInfo: AccountInfo | null, usuarios: UsuariosSPService): Promise<Ticket> {
+export async function buildNuevoTicketPayload(state: Ticket, ans: string, apertura: Date, solucion: TZDate | Date | null, usuarios: UsuariosSPService): Promise<Ticket> {
   const resolutor = await pickTecnicoConMenosCasos(usuarios)
   return {
     Title: state.Title,
@@ -17,8 +16,8 @@ export async function buildNuevoTicketPayload(state: Ticket, ans: string, apertu
     SubCategoria: state.SubCategoria,
     Nombreresolutor: resolutor?.Title,
     Correoresolutor: resolutor?.Correo,
-    Solicitante: userInfo?.name ?? "",
-    CorreoSolicitante: userInfo?.username ?? "",
+    Solicitante: state.Solicitante,
+    CorreoSolicitante: state.CorreoSolicitante,
     Estadodesolicitud: ESTADO_EN_ATENCION,
     ANS: ans,
     id_Categoria: state.id_Categoria,

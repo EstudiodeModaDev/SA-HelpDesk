@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import type { MenuItem } from "../../App";
 import type { User } from "../../Models/Usuarios";
-import { navs } from "./const";
 
 type Section = {
   id: "workspace" | "analysis" | "admin";
@@ -19,8 +18,8 @@ function isRouteActive(item: MenuItem, pathname: string): boolean {
   return pathname.startsWith(`${itemPath}/`);
 }
 
-export function Sidebar(props: { selected: string; onSelect: (k: string) => void; user: User; collapsed?: boolean; onToggle?: () => void; sections: Section[] }) {
-  const { selected, onSelect, user, collapsed = false, onToggle, sections } = props;
+export function Sidebar(props: { selected: string; onSelect: (k: string) => void; user: User; collapsed?: boolean; onToggle?: () => void; sections: Section[]; items: MenuItem[] }) {
+  const { selected, onSelect, user, collapsed = false, onToggle, sections, items } = props;
   const location = useLocation();
   const [open, setOpen] = React.useState<Record<string, boolean>>({});
 
@@ -42,18 +41,18 @@ export function Sidebar(props: { selected: string; onSelect: (k: string) => void
       });
     };
 
-    walk(navs);
+    walk(items);
     setOpen((prev) => ({ ...prev, ...next }));
-  }, [location.pathname, navs, selected]);
+  }, [items, location.pathname, selected]);
 
   const grouped = React.useMemo(() => {
     return sections
       .map((section) => ({
         ...section,
-        items: navs.filter((item) => (item.section ?? "workspace") === section.id),
+        items: items.filter((item) => (item.section ?? "workspace") === section.id),
       }))
       .filter((section) => section.items.length > 0);
-  }, [navs, sections]);
+  }, [items, sections]);
 
   const toggle = (id: string) => setOpen((s) => ({ ...s, [id]: !s[id] }));
 

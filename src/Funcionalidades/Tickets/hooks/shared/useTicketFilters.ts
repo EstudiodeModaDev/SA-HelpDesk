@@ -62,9 +62,11 @@ export async function buildTicketsFilter(
   }
 
   if (range.from && range.to && range.from < range.to) {
-    filters.push(`fields/FechaApertura ge '${range.from}T00:00:00Z'`);
-    filters.push(`fields/FechaApertura le '${range.to}T23:59:59Z'`);
+    filters.push(`fields/TiempoSolucion ge '${range.from}T00:00:00Z'`);
+    filters.push(`fields/TiempoSolucion le '${range.to}T23:59:59Z'`);
   }
+
+  console.log(filters.join(" and "))
 
   const orderParts = sorts
     .map((s) => {

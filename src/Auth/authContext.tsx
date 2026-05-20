@@ -13,6 +13,9 @@ type AuthCtx = {
 
 const Ctx = React.createContext<AuthCtx | null>(null);
 
+/**
+ * Provee el estado de autenticacion y helpers de sesion para toda la aplicacion.
+ */
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [ready, setReady] = React.useState(false);
   const [account, setAccount] = React.useState<AccountInfo | null>(null);
@@ -71,6 +74,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 };
 
+/**
+ * Recupera el contexto de autenticacion inicializado por {@link AuthProvider}.
+ */
 export function useAuth(): AuthCtx {
   const ctx = React.useContext(Ctx);
   if (!ctx) throw new Error('useAuth must be used within <AuthProvider>');

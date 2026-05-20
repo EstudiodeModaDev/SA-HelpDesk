@@ -19,6 +19,9 @@ function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; 
   );
 }
 
+/**
+ * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
+ */
 export default function TablaTickets() {
   const {
     espacio,
@@ -77,6 +80,13 @@ export default function TablaTickets() {
 
     load();
   }, [ticketSeleccionado?.ID, updateSelectedTicket]);
+
+  const cleanFilters = React.useCallback(() => {
+    setRange({from: "", to: ""})
+    setEspacio("")
+    setSearch("")
+    setFilterMode("")
+  }, [])
 
   return (
     <div className="tabla-tickets">
@@ -152,6 +162,10 @@ export default function TablaTickets() {
                 title="Hasta"
               />
             </div>
+
+            <button type="button" className="tickets-filtros__clear" onClick={cleanFilters}>
+              Limpiar filtros
+            </button>
           </div>
         </>
       )}

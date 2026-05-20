@@ -3,6 +3,9 @@ import { useGraphServices } from "../../../../graph/GrapServicesContext";
 import type { Categoria, SubCategoria } from "../../../../Models/Categorias";
 import { mapCategoria, mapSubCategoria } from "../../utils/ticketMappers";
 
+/**
+ * Carga y normaliza los catalogos de categorias y subcategorias usados por tickets.
+ */
 export function useTicketCatalogos() {
   const graph = useGraphServices()
 

@@ -81,6 +81,13 @@ export default function TablaTickets() {
     load();
   }, [ticketSeleccionado?.ID, updateSelectedTicket]);
 
+  const cleanFilters = React.useCallback(() => {
+    setRange({from: "", to: ""})
+    setEspacio("")
+    setSearch("")
+    setFilterMode("")
+  }, [])
+
   return (
     <div className="tabla-tickets">
       {!ticketSeleccionado && (
@@ -155,6 +162,10 @@ export default function TablaTickets() {
                 title="Hasta"
               />
             </div>
+
+            <button type="button" className="tickets-filtros__clear" onClick={cleanFilters}>
+              Limpiar filtros
+            </button>
           </div>
         </>
       )}

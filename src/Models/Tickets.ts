@@ -22,6 +22,7 @@ export type Ticket = {
   id_Categoria: string
   UltimaActualizacion: string | null
   Proveedor?: string
+  Zona?: string
 };
 
 export type FormRecategorizarState = {

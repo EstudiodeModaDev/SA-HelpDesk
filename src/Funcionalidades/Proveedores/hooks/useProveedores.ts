@@ -4,6 +4,9 @@ import { useProveedoresData } from "./useProveedoresData";
 import { useProveedoresForm } from "./useProveedoresForm";
 
 
+/**
+ * Agrupa el listado, las opciones y el alta de proveedores.
+ */
 export function useProveedores() {
   const graph = useGraphServices()
   const data = useProveedoresData();

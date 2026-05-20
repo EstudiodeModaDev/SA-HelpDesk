@@ -1,5 +1,8 @@
 import React from "react";
 
+/**
+ * Centraliza la seleccion local de archivos reutilizable entre formularios y modales.
+ */
 export function useFiles() {
   const [files, setFiles] = React.useState<File[]>([]);
 

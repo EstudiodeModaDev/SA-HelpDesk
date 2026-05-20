@@ -19,6 +19,9 @@ function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; 
   );
 }
 
+/**
+ * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
+ */
 export default function TablaTickets() {
   const {
     espacio,

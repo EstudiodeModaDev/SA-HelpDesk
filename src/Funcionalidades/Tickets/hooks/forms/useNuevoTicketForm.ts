@@ -39,6 +39,10 @@ const initialState: Ticket = {
   UltimaActualizacion: null
 };
 
+/**
+ * Administra el formulario de creacion de tickets, incluyendo validacion, adjuntos,
+ * calculo de fecha objetivo y acciones posteriores a la creacion.
+ */
 export function useNuevoTicketForm() {
   const graph = useGraphServices();
   const attachmentsList = useTicketsAttachmentsList()

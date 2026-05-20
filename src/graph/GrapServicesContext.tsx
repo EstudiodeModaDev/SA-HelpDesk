@@ -20,16 +20,25 @@ import { LogHelpDeskService } from "../services/LogHeldesk.service";
 
 
 /* ================== Tipos de config ================== */
+/**
+ * Define la ubicacion de un sitio SharePoint consumido por la aplicacion.
+ */
 export type SiteConfig = {
   hostname: string;
   sitePath: string; // Debe iniciar con '/'
 };
 
+/**
+ * Agrupa la configuracion de sitios requerida por los servicios de negocio.
+ */
 export type UnifiedConfig = {
   sa: SiteConfig;    // sitio principal (HD)
 };
 
 /* ================== Tipos del contexto ================== */
+/**
+ * Conjunto de servicios compartidos construidos sobre Microsoft Graph y SharePoint.
+ */
 export type GraphServices = {
   graph: GraphRest;
 
@@ -69,6 +78,9 @@ type ProviderProps = {
   config?: Partial<UnifiedConfig>;
 };
 
+/**
+ * Inicializa el cliente Graph y las fachadas de acceso a datos disponibles en la app.
+ */
 export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, config }) => {
   const { getToken } = useAuth();
 
@@ -126,6 +138,9 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
 };
 
 /* ================== Hook de consumo ================== */
+/**
+ * Expone el conjunto de servicios registrados por {@link GraphServicesProvider}.
+ */
 export function useGraphServices(): GraphServices {
   const ctx = React.useContext(GraphServicesContext);
   if (!ctx) throw new Error("useGraphServices debe usarse dentro de <GraphServicesProvider>.");

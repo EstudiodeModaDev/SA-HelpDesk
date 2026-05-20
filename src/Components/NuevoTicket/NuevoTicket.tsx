@@ -14,8 +14,14 @@ import FilesAdmin from "../Common/FilesAdmin";
 import { useFranquicias } from "../../Funcionalidades/Franquicias/hooks/useFranquicias";
 import { useTiendasZonas } from "../../Funcionalidades/TiendasZonas/hooks/useTiendasZonas";
 
+/**
+ * Opcion de usuario extendida con la procedencia del registro mostrado en el selector.
+ */
 export type UserOptionEx = UserOption & { source?: "Empleado" | "Franquicia" };
 
+/**
+ * Representa una opcion de clasificacion del ticket a nivel categoria y subcategoria.
+ */
 export type TreeOption = {
   value: string; // "sub:<id>" | "art:<id>"
   label: string; // "Cat > Sub" | "Cat > Sub > Art"
@@ -30,6 +36,9 @@ export type TreeOption = {
   };
 };
 
+/**
+ * Renderiza el formulario de creacion de un ticket operativo.
+ */
 export default function NuevoTicketForm() {
   const {Franquicias: FranquiciasSvc, ANS} = useGraphServices();
   const {state, errors, submitting, categorias, subcategoriasAll, loadingCatalogos, setField, handleSubmit, files, addFiles, removeFile} = useNuevoTicketForm();

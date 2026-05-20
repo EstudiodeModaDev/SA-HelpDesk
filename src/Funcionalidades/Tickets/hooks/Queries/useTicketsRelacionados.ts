@@ -2,6 +2,9 @@ import * as React from "react";
 import type { Ticket } from "../../../../Models/Tickets";
 import { useGraphServices } from "../../../../graph/GrapServicesContext";
 
+/**
+ * Recupera el ticket padre y los tickets hijos asociados a un caso dado.
+ */
 export function useTicketsRelacionados( ticket: Ticket) {
   const service = useGraphServices();
 

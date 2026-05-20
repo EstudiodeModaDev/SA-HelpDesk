@@ -4,6 +4,9 @@ import type { TicketsService } from "../../../services/Tickets.service";
 import { useAuth } from "../../../Auth/authContext";
 
 
+/**
+ * Compone el rango de fechas y la consulta agregada del tablero resumen.
+ */
 export function useDashboard(TicketsSvc: TicketsService) {
   const { account } = useAuth();
   const { range, setRange } = useDashboardRange();

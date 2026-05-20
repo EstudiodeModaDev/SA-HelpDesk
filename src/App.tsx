@@ -19,6 +19,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 type RenderCtx = { services?: { Tickets: TicketsService; Usuarios: UsuariosSPService; Logs: LogService } };
 type Services = { Tickets: TicketsService; Usuarios: UsuariosSPService; Logs: LogService };
 
+/**
+ * Describe un nodo navegable del menu lateral y la vista asociada.
+ */
 export type MenuItem = {
   id: string;
   label: string;
@@ -39,11 +42,17 @@ type PermissionsEngine = {
   list: () => Permission[];
 };
 
+/**
+ * Contexto reducido usado para evaluar visibilidad y dependencias de navegacion.
+ */
 export type NavContext = {
   permissions?: PermissionsEngine | null;
   hasService?: (k: keyof Services) => boolean;
 };
 
+/**
+ * Agrupa entradas del menu lateral por area operativa.
+ */
 export type NavSection = {
   id: "workspace" | "analysis" | "admin";
   title: string;
@@ -209,6 +218,11 @@ function LoggedApp({ user }: { user: User }) {
   );
 }
 
+/**
+ * Punto de entrada de la aplicacion autenticada.
+ *
+ * Encadena autenticacion, provisiones de servicios y shell visual.
+ */
 export default function App() {
   return (
     <AuthProvider>

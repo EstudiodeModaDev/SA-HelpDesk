@@ -23,8 +23,14 @@ type Props = {
   onAddObservador: (ticketId: string, correo: string, nombre: string) => Promise<void>;
 };
 
+/**
+ * Opcion tipada para selects y modales del detalle del ticket.
+ */
 export type Opcion = { value: string; label: string };
 
+/**
+ * Presenta el detalle completo del ticket, sus adjuntos, historial y acciones operativas.
+ */
 export function CaseDetail({ ticket, onVolver, onDocumentar }: Props) {
   const { engine } = usePermissions();
   const ticketAttachment = useTicketsAttachmentsList();
@@ -336,6 +342,9 @@ export function CaseDetail({ ticket, onVolver, onDocumentar }: Props) {
 
 type TruncProps = { text?: string | null; lines?: number; className?: string; maxLenght?: number };
 
+/**
+ * Renderiza texto truncado manteniendo el valor completo disponible como tooltip.
+ */
 export default function Trunc({ text, lines = 1, className = "" }: TruncProps) {
   const safe = (text ?? "—").toString();
   return (

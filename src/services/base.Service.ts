@@ -1,6 +1,12 @@
 import { GraphRest } from "../graph/GraphRest";
 import type { GetAllOpts, PageResult } from "../Models/Commons";
 
+/**
+ * Implementa operaciones CRUD y paginacion para listas SharePoint expuestas via Graph.
+ *
+ * Las clases concretas solo deben resolver el mapeo `toModel` de la respuesta remota
+ * hacia el modelo tipado consumido por componentes y hooks.
+ */
 export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "ID">, TUpdate = Partial<Omit<TModel, "ID">>> {
   protected graph: GraphRest;
   protected hostname: string;

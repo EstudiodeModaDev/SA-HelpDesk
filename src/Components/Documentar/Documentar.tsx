@@ -8,6 +8,9 @@ import FilesAdmin from "../Common/FilesAdmin";
 import { usePlantillas } from "../../Funcionalidades/Templates/hooks/usePlantillas";
 
 
+/**
+ * Renderiza el formulario de documentacion de tickets para soluciones y seguimientos.
+ */
 export default function Documentar({ ticket, tipo, onDone }: { ticket: Ticket; tipo: "solucion" | "seguimiento"; onDone: () => void | Promise<void>}) { 
   const { account } = useAuth();
   const { state, errors, submitting, setField, handleSubmit, addFiles, files, removeFile} = useDocumentarTicket()

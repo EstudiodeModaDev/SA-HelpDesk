@@ -22,9 +22,10 @@ export async function buildTicketsFilter(
     pageSize: number; 
     sorts: Array<{ field: SortField; dir: SortDir }>;
     servicio: TiendaZonaService
+    proveedor: string
   }, 
   ): Promise<GetAllOpts> {
-  const { view, userMail, filterMode, range, pageSize, sorts, espacio, servicio} = params;
+  const { view, userMail, filterMode, range, pageSize, sorts, espacio, servicio, proveedor } = params;
 
   const filters: string[] = [];
   const isAdmin = view;
@@ -64,6 +65,10 @@ export async function buildTicketsFilter(
   if (range.from && range.to && range.from < range.to) {
     filters.push(`fields/TiempoSolucion ge '${range.from}T00:00:00Z'`);
     filters.push(`fields/TiempoSolucion le '${range.to}T23:59:59Z'`);
+  }
+
+  if (proveedor) {
+    filters.push(`fields/Proveedor eq '${escapeOData(proveedor)}'`);
   }
 
   console.log(filters.join(" and "))

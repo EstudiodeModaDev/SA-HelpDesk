@@ -6,6 +6,7 @@ import { CaseDetail } from "../DetallesTickets/DetallesTickets";
 import { calcularColorEstado } from "../../Funcionalidades/Tickets/utils/ticketsColors";
 import { useTickets } from "../../Funcionalidades/Tickets/hooks/Queries/useTickets";
 import { zonas } from "../../consts/zonasConst";
+import { useProveedores } from "../../Funcionalidades/Proveedores/hooks/useProveedores";
 
 function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; dir: SortDir }>) {
   const idx = sorts.findIndex((s) => s.field === field);
@@ -23,27 +24,8 @@ function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; 
  * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
  */
 export default function TablaTickets() {
-  const {
-    espacio,
-    setEspacio,
-    rows,
-    loading,
-    error,
-    filterMode,
-    range,
-    pageSize,
-    pageIndex,
-    hasNext,
-    sorts,
-    setFilterMode,
-    setRange,
-    setPageSize,
-    updateSelectedTicket,
-    nextPage,
-    loadFirstPage,
-    toggleSort,
-    addObservador,
-  } = useTickets();
+  const {espacio, setEspacio, rows, loading: loadingTickets, error, filterMode, range, pageSize, pageIndex, hasNext, sorts, setFilterMode, setRange, setPageSize, updateSelectedTicket, nextPage, loadFirstPage, toggleSort, addObservador, proveedor, setProveedor} = useTickets();
+  const { proveedoresOptions } = useProveedores();
   const [search, setSearch] = React.useState("");
   const [ticketSeleccionado, setTicketSeleccionado] = React.useState<Ticket | null>(null);
 
@@ -125,6 +107,13 @@ export default function TablaTickets() {
             </div>
 
             <div className="tickets-filtros__group">
+              <select value={proveedor} onChange={(e) => setProveedor(e.target.value as any)} title="Proveedor">
+                <option value="En curso">Escoja un proveedor</option>
+                {proveedoresOptions.map((p) => (
+                  <option key={p.value} value={p.label}>{p.label}</option>
+                ))}
+              </select>
+
               <select value={filterMode} onChange={(e) => setFilterMode(e.target.value as any)} title="Estado">
                 <option value="En curso">En curso</option>
                 <option value="Cerrados">Cerrados</option>
@@ -170,9 +159,9 @@ export default function TablaTickets() {
         </>
       )}
 
-      {loading && <p>Cargando tickets...</p>}
+      {loadingTickets && <p>Cargando tickets...</p>}
       {error && <p style={{ color: "#b91c1c" }}>{error}</p>}
-      {!loading && !error && filtered.length === 0 && !ticketSeleccionado && <p>No hay tickets para los filtros seleccionados.</p>}
+      {!loadingTickets && !error && filtered.length === 0 && !ticketSeleccionado && <p>No hay tickets para los filtros seleccionados.</p>}
 
       {ticketSeleccionado ? (
         <CaseDetail
@@ -278,9 +267,9 @@ export default function TablaTickets() {
 
           {filtered.length > 0 && (
             <div className="paginacion">
-              <button onClick={loadFirstPage} disabled={loading || pageIndex <= 1}>Anterior</button>
+              <button onClick={loadFirstPage} disabled={loadingTickets || pageIndex <= 1}>Anterior</button>
               <span>Pagina {pageIndex}</span>
-              <button onClick={nextPage} disabled={loading || !hasNext}>Siguiente</button>
+              <button onClick={nextPage} disabled={loadingTickets || !hasNext}>Siguiente</button>
 
               <label htmlFor="page-size" style={{ marginLeft: 12, marginRight: 8 }}>
                 Tickets por Pagina:
@@ -289,7 +278,7 @@ export default function TablaTickets() {
                 id="page-size"
                 value={pageSize}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setPageSize(parseInt(e.target.value, 10))}
-                disabled={loading}
+                disabled={loadingTickets}
               >
                 {[10, 15, 20, 50, 100].map((n) => (
                   <option key={n} value={n}>

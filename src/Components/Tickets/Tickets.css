@@ -301,3 +301,21 @@
     padding:10px;
   }
 }
+
+
+.tabla-tickets th:nth-child(4),
+.tabla-tickets th:nth-child(2),
+.tabla-tickets th:nth-child(3),
+.tabla-tickets td:nth-child(2),
+.tabla-tickets td:nth-child(3),
+.tabla-tickets td:nth-child(4){
+  max-width:400px;
+}
+
+.tabla-tickets tbody td:nth-child(2),
+.tabla-tickets tbody td:nth-child(3),
+.tabla-tickets tbody td:nth-child(4){
+  white-space:normal;
+  word-break:break-word;
+  overflow-wrap:break-word;
+}

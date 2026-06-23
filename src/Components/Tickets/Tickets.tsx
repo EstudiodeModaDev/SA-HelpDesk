@@ -236,6 +236,18 @@ export default function TablaTickets() {
                 >
                   Fecha maxima {renderSortIndicator("TiempoSolucion", sorts)}
                 </th>
+                <th
+                  role="button"
+                  tabIndex={0}
+                  onClick={(e) => toggleSort("TiempoSolucion", e.shiftKey)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") toggleSort("TiempoSolucion", e.shiftKey);
+                  }}
+                  aria-label="Ordenar por Fecha máxima"
+                  style={{ cursor: "pointer", whiteSpace: "nowrap" }}
+                >
+                  Dias vencimiento{renderSortIndicator("TiempoSolucion", sorts)}
+                </th>
                 <th>Estado</th>
               </tr>
             </thead>
@@ -253,6 +265,14 @@ export default function TablaTickets() {
                   <td><span title={ticket.Title}>{ticket.Title}</span></td>
                   <td>{toISODateTimeFlex(ticket.FechaApertura) || "–"}</td>
                   <td>{toISODateTimeFlex(ticket.TiempoSolucion) || "N/A"}</td>
+                  <td>{` Quedan
+                        ${Math.floor(Number(
+                          (new Date(ticket.TiempoSolucion!).getTime() -
+                            new Date().getTime()) /
+                          (1000 * 60 * 60 * 24)
+                        ))} dias`
+                      }
+                  </td>
                   <td>
                     <span
                       className="estado-circulo"

@@ -30,7 +30,6 @@ export class TicketsService extends BaseSharePointListService<Ticket> {
       ANS: f.ANS ?? "",
 
       Nombreresolutor: f.Nombreresolutor ?? "",
-      IdResolutor: f.IdResolutor ?? "",
       Correoresolutor: f.Correoresolutor ?? "",
 
       Solicitante: f.Solicitante ?? "",

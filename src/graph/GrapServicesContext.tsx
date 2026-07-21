@@ -17,6 +17,7 @@ import { TiendaZonaService, } from "../services/TiendasZonas.Service";
 import { ProveedorService } from "../services/Proveedor.service";
 import { TicketHelpdeskService } from "../services/TicketsHelpdesk.Service";
 import { LogHelpDeskService } from "../services/LogHeldesk.service";
+import { JefeZonaService } from "../services/Sharepoint/JefesZona.service";
 
 
 /* ================== Tipos de config ================== */
@@ -59,6 +60,7 @@ export type GraphServices = {
   proveedor: ProveedorService
   ticketHelpDesk: TicketHelpdeskService
   logHelpDesk: LogHelpDeskService
+  jefesZona: JefeZonaService
 };
 
 /* ================== Contexto ================== */
@@ -121,11 +123,12 @@ export const GraphServicesProvider: React.FC<ProviderProps> = ({ children, confi
     const seguimientosAttachments = new SeguimientosAttachmentsService(graph)
     const tiendasZonas            = new TiendaZonaService(graph)
     const proveedor               = new ProveedorService(graph)
-    const ticketHelpDesk         = new TicketHelpdeskService(graph,)
-    const logHelpDesk         = new LogHelpDeskService(graph,)
+    const ticketHelpDesk          = new TicketHelpdeskService(graph,)
+    const logHelpDesk             = new LogHelpDeskService(graph,)
+    const jefesZona               = new JefeZonaService(graph,)
 
     return {
-      logHelpDesk, ticketHelpDesk, graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
+      jefesZona, logHelpDesk, ticketHelpDesk, graph,proveedor, tiendasZonas, Usuarios, Tickets, Logs, Categorias, SubCategorias, Franquicias, Plantillas, ANS, mail, tickesAttachments, ticketBiblioteca, seguimientosAttachments, seguimientosBiblioteca
 
     };
   }, [graph, cfg]);

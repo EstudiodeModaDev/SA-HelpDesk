@@ -41,7 +41,7 @@ export type TreeOption = {
  */
 export default function NuevoTicketForm() {
   const {Franquicias: FranquiciasSvc, ANS} = useGraphServices();
-  const {state, errors, submitting, categorias, subcategoriasAll, loadingCatalogos, setField, handleSubmit, files, addFiles, removeFile} = useNuevoTicketForm();
+  const {state, errors, submitting, categorias, subcategoriasAll, loadingCatalogos, permissionsLoading, setField, handleSubmit, files, addFiles, removeFile} = useNuevoTicketForm();
   const { franqOptions, loading: loadingFranq, error: franqError } = useFranquicias(FranquiciasSvc!);
   const { workersOptions, loadingWorkers, error: usersError } = useWorkers({ onlyEnabled: true });
   const {tiendaZonaOptions, loading: loadingTiendas} = useTiendasZonas()
@@ -336,7 +336,7 @@ export default function NuevoTicketForm() {
           </div>
 
           <div className="ntk-actions__buttons">
-            <button type="submit" disabled={submitting || loadingCatalogos} className="ntk-btn ntk-btn--primary">
+            <button type="submit" disabled={submitting || loadingCatalogos || permissionsLoading} className="ntk-btn ntk-btn--primary">
               {submitting ? "Enviando..." : "Enviar Ticket"}
             </button>
           </div>

@@ -10,7 +10,11 @@ export function validateTiendaZona(state: TiendaZona): TiendaZonaErrors {
 
   if (!state.Zona?.trim()) {
     errors.Zona = "Seleccione la zona del espacio.";
-  } 
+  }
+
+  if (!state.JefeZonaId?.trim() && !state.JefeZona?.trim()) {
+    errors.JefeZonaId = "Selecciona el jefe de zona asociado.";
+  }
 
   return errors;
 }

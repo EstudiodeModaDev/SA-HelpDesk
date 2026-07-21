@@ -4,16 +4,33 @@ import Form from "./Form";
 import Tabla from "./Tabla";
 import "../Common/CatalogUI.css";
 import { useTiendasZonas } from "../../Funcionalidades/TiendasZonas/hooks/useTiendasZonas";
+import { useJefeZonaList } from "../../Funcionalidades/jefeZona/hooks/useJefeZonaList";
 import { zonas } from "../../consts/zonasConst";
 
 export default function TiendasZonas() {
   const {zona, setZona, tiendaZona, loading, error, state, errors, submitting, setField, addTiendaZona, deleteTiendaZona, loadTiendasZonas } = useTiendasZonas();
+  const { jefeZonaOptions, jefesZona } = useJefeZonaList();
   const [showForm, setShowForm] = React.useState(false);
+  const activeJefeZonaIds = React.useMemo(() => {
+    return new Set(
+      jefesZona
+        .filter((item) => item.Activo !== false)
+        .map((item) => String(item.Id ?? ""))
+        .filter(Boolean)
+    );
+  }, [jefesZona]);
+
+  const activeJefeZonaOptions = React.useMemo(() => {
+    return jefeZonaOptions.filter((option) => activeJefeZonaIds.has(String(option.value)));
+  }, [activeJefeZonaIds, jefeZonaOptions]);
 
   const handleSubmit = React.useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
-      await addTiendaZona();
+      const created = await addTiendaZona();
+      if (created) {
+        setShowForm(false);
+      }
     },
     [addTiendaZona]
   );
@@ -35,6 +52,7 @@ export default function TiendasZonas() {
       <Tabla 
         rows={tiendaZona} 
         zonas={zonas} 
+        jefesZonaOptions={jefeZonaOptions}
         loading={loading} 
         error={error} 
         onDelete={deleteTiendaZona} 
@@ -53,7 +71,10 @@ export default function TiendasZonas() {
               submitting={submitting}
               setField={setField}
               onSubmit={handleSubmit}
-              onClose={() => setShowForm(false)} zonas={zonas}            />
+              onClose={() => setShowForm(false)}
+              zonas={zonas}
+              jefesZonaOptions={activeJefeZonaOptions}
+            />
           </div>
         </div>
       )}

@@ -6,6 +6,7 @@ import type { DailyPoint, ResolutorAgg, TopCategoria } from "../../../Models/Das
 import { buildDashboardTicketsFilter } from "../utils/dahsboardFilters";
 import { useTickets } from "../../Tickets/hooks/Queries/useTickets";
 import { buildAllCategorias, buildCasosPorDia, buildConteoPorMes, buildMetrics, buildResolutores, buildTopCategorias, buildTopSolicitantes } from "../utils/dashboardAggregations";
+import { shouldExcludeTicketFromMetrics } from "../../Tickets/utils/ticketConstants";
 
 type Params = {
   TicketsSvc: TicketsService;
@@ -43,15 +44,18 @@ export function useDashboardData({ TicketsSvc, range, mode = "detalle", username
       const { filter } = buildDashboardTicketsFilter({ range, mode, username });
       if(!filter) return
       const list = await ticketsController.allTickets(filter);
+      const metricsList = list.filter(
+        (ticket) => !shouldExcludeTicketFromMetrics(ticket.Estadodesolicitud)
+      );
 
-      setTickets(list);
-      setMetrics(buildMetrics(list));
-      setTopCategorias(buildTopCategorias(list));
-      setTotalCategorias(buildAllCategorias(list));
-      setTopSolicitante(buildTopSolicitantes(list));
-      setResolutores(buildResolutores(list));
-      setCasosPorDia(buildCasosPorDia(list));
-      setConteoPorMes(buildConteoPorMes(list));
+      setTickets(metricsList);
+      setMetrics(buildMetrics(metricsList));
+      setTopCategorias(buildTopCategorias(metricsList));
+      setTotalCategorias(buildAllCategorias(metricsList));
+      setTopSolicitante(buildTopSolicitantes(metricsList));
+      setResolutores(buildResolutores(metricsList));
+      setCasosPorDia(buildCasosPorDia(metricsList));
+      setConteoPorMes(buildConteoPorMes(metricsList));
     } catch (e: any) {
       setError(e?.message ?? "Error cargando dashboard");
     } finally {

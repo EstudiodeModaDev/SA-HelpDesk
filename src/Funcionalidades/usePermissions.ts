@@ -2,6 +2,7 @@ import * as React from "react";
 import type { Permission } from "../config/permissions.config";
 import { getCurrentUserGroups } from "../services/Sharepoint/spUser.service";
 import { buildPermissions } from "../services/Permissions/PermissionsEngine";
+import { resolveRoleFromGroups, type AppRole } from "../utils/userRole";
 
 type PermissionsEngine = {
   can: (perm: Permission) => boolean;
@@ -22,6 +23,8 @@ const EMPTY_ENGINE: PermissionsEngine = {
  */
 export function usePermissions() {
   const [engine, setEngine] = React.useState<PermissionsEngine>(EMPTY_ENGINE);
+  const [groups, setGroups] = React.useState<string[]>([]);
+  const [role, setRole] = React.useState<AppRole>("Usuario");
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -38,10 +41,14 @@ export function usePermissions() {
         const permissions = buildPermissions(groups);
 
         if (!alive) return;
+        setGroups(groups);
+        setRole(resolveRoleFromGroups(groups));
         setEngine(permissions);
       } catch (e: any) {
         if (!alive) return;
         setError(e?.message ?? "No se pudieron cargar permisos");
+        setGroups([]);
+        setRole("Usuario");
         setEngine(EMPTY_ENGINE);
       } finally {
         if (alive) setLoading(false);
@@ -53,5 +60,5 @@ export function usePermissions() {
     };
   }, []);
 
-  return { engine, loading, error };
+  return { engine, groups, role, loading, error };
 }

@@ -111,9 +111,15 @@ export function CaseDetail({ ticket, onVolver, onDocumentar }: Props) {
             ← Volver
           </button>
 
-          <button type="button" className="ticket-btn ticket-btn--primary" onClick={() => setProveedor(true)}>
-            Enviar correo a proveedor
-          </button>
+
+
+          {engine.can("tickets.change") ? (
+            <button type="button" className="ticket-btn ticket-btn--primary" onClick={() => setProveedor(true)}>
+              Enviar correo a proveedor
+            </button>
+          ) : (
+            null
+          )}
         </div>
       </header>
 

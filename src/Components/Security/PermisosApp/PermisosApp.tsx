@@ -6,6 +6,7 @@ import { useWorkers } from "../../../Funcionalidades/Workers";
 import ModalOtorgarPermiso from "../AddGraphUsers/ModalAgregarPermiso";
 import type { UsuariosSP } from "../../../Models/Usuarios";
 import { norm } from "../../../utils/Commons";
+import { normalizeRoleLabel } from "../../../utils/userRole";
 
 const ACTIVE_STATUS = "Disponible";
 const INACTIVE_STATUS = "Inactivo";
@@ -245,7 +246,7 @@ export default function UsuariosApp() {
                                 <div className="userIdentity__avatar">{user.Title?.[0] ?? "T"}</div>
                                 <div className="userIdentity__copy">
                                   <span className="userIdentity__name">{user.Title}</span>
-                                  <span className="userIdentity__meta">Rol: Tecnico</span>
+                                  <span className="userIdentity__meta">Rol: {normalizeRoleLabel(user.Rol)}</span>
                                 </div>
                               </div>
                             </td>

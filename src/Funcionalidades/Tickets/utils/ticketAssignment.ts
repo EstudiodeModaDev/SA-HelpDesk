@@ -26,7 +26,7 @@ export async function increaseResolverCaseCount(Usuarios: UsuariosSPService, ema
 export async function pickTecnicoConMenosCasos(Usuarios: UsuariosSPService): Promise<UsuariosSP | null> {
 
   // 1. Traer técnicos disponibles
-  const resolutores: UsuariosSP[] = (await Usuarios.getAll({filter: "fields/Disponible eq 'Disponible'",})).items;
+  const resolutores: UsuariosSP[] = (await Usuarios.getAll({filter: "fields/Rol eq 'Tecnico' and fields/Disponible eq 'Disponible'",})).items;
 
   if (!resolutores.length) return null;
 

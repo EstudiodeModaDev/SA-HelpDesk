@@ -1,7 +1,6 @@
 export type TicketHelpdesk = {
   ID?: string;
   Nombreresolutor?: string;
-  IdResolutor?: string;
   Solicitante?: string;
   Title?: string; //Asunto
   FechaApertura?: string; // "dd/mm/yyyy hh:mm"

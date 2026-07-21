@@ -1,10 +1,15 @@
 import type { Ticket } from "../../../Models/Tickets";
 import { parseFechaFlex } from "../../../utils/Date";
+import { normalizeStatus } from "./ticketConstants";
 
 export function calcularColorEstado(ticket: Ticket): string {
-  const estado = (ticket.Estadodesolicitud ?? "").toLowerCase();
+  const estado = normalizeStatus(ticket.Estadodesolicitud);
 
-  if (estado === "cerrado" || estado === "cerrado fuera de tiempo") {
+  if (estado === "pendiente aprobacion") {
+    return "rgba(245, 158, 11, 0.95)";
+  }
+
+  if (estado === "cerrado" || estado === "cerrado fuera de tiempo" || estado.includes("no aprobado")) {
     return "rgb(255, 255, 255)";
   }
 

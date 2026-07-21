@@ -3,6 +3,12 @@ import type { SortDir, SortField } from "../../../../Models/Tickets";
 import type { TiendaZona } from "../../../../Models/TiendasZonas";
 import type { TiendaZonaService } from "../../../../services/TiendasZonas.Service";
 import { escapeOData } from "../../../../utils/Commons";
+import {
+  ESTADO_EN_ATENCION,
+  ESTADO_FUERA_TIEMPO,
+  ESTADO_NO_APROBADO,
+  ESTADO_PENDIENTE_APROBACION,
+} from "../../utils/ticketConstants";
 
 export const sortFieldToOData: Record<SortField, string> = {
   id: "Id",
@@ -14,17 +20,17 @@ export const sortFieldToOData: Record<SortField, string> = {
 
 export async function buildTicketsFilter(
   params: {
-    espacio: string; 
-    view: boolean; 
-    userMail: string; 
-    filterMode: string; 
-    range: DateRange; 
-    pageSize: number; 
+    espacio: string;
+    view: boolean;
+    userMail: string;
+    filterMode: string;
+    range: DateRange;
+    pageSize: number;
     sorts: Array<{ field: SortField; dir: SortDir }>;
-    servicio: TiendaZonaService
-    proveedor: string
-  }, 
-  ): Promise<GetAllOpts> {
+    servicio: TiendaZonaService;
+    proveedor: string;
+  }
+): Promise<GetAllOpts> {
   const { view, userMail, filterMode, range, pageSize, sorts, espacio, servicio, proveedor } = params;
 
   const filters: string[] = [];
@@ -32,23 +38,27 @@ export async function buildTicketsFilter(
 
   if (!isAdmin) {
     const emailSafe = String(userMail ?? "").replace(/'/g, "''");
-
     const myVisibility =
       `(fields/CorreoSolicitante eq '${emailSafe}' or ` +
       `fields/CorreoObservador eq '${emailSafe}' or ` +
-      `fields/Correoresolutor eq '${emailSafe}')`;
+      `fields/Correoresolutor eq '${emailSafe}')` 
 
     filters.push(myVisibility);
   }
 
   if (filterMode === "En curso") {
     filters.push(
-      `(fields/Estadodesolicitud eq 'En atención' or fields/Estadodesolicitud eq 'Fuera de tiempo')`
+      `(fields/Estadodesolicitud eq '${ESTADO_EN_ATENCION}' or ` +
+      `fields/Estadodesolicitud eq 'En Atención' or ` +
+      `fields/Estadodesolicitud eq '${ESTADO_FUERA_TIEMPO}' or ` +
+      `fields/Estadodesolicitud eq '${ESTADO_PENDIENTE_APROBACION}')`
     );
   } else if (filterMode !== "Todos") {
-    filters.push(`startswith(fields/Estadodesolicitud,'Cerrado')`);
+    filters.push(
+      `(startswith(fields/Estadodesolicitud,'Cerrado') or fields/Estadodesolicitud eq '${ESTADO_NO_APROBADO}')`
+    );
   }
-  
+
   if (espacio) {
     const tiendas = await getShopsByZone({ zona: espacio }, servicio);
     const tiendasFilter = tiendas
@@ -71,8 +81,6 @@ export async function buildTicketsFilter(
     filters.push(`fields/Proveedor eq '${escapeOData(proveedor)}'`);
   }
 
-  console.log(filters.join(" and "))
-
   const orderParts = sorts
     .map((s) => {
       const col = sortFieldToOData[s.field];
@@ -91,14 +99,13 @@ export async function buildTicketsFilter(
   };
 }
 
-export async function getShopsByZone(params: {zona: string}, servicio: TiendaZonaService ): Promise<TiendaZona[]> {
+export async function getShopsByZone(params: { zona: string }, servicio: TiendaZonaService): Promise<TiendaZona[]> {
   const { zona } = params;
 
-  try{
-    const tiendasZonas: TiendaZona[] = (await servicio.getAll({filter: `fields/Zona eq '${escapeOData(zona)}'`})).items
-    return tiendasZonas
+  try {
+    const tiendasZonas: TiendaZona[] = (await servicio.getAll({ filter: `fields/Zona eq '${escapeOData(zona)}'` })).items;
+    return tiendasZonas;
   } catch {
-    return []
+    return [];
   }
-
 }

@@ -14,11 +14,25 @@ export class TiendaZonaService extends BaseSharePointListService<TiendaZona> {
 
   protected toModel(item: any): TiendaZona {
     const f = item?.fields ?? {};
+    const jefeZonaId =
+      f.JefeZonaId ??
+      f.JefeZonaLookupId ??
+      f.JefedeZonaLookupId ??
+      f.Jefe_x0020_de_x0020_ZonaLookupId ??
+      "";
+    const jefeZona =
+      f.JefeZona ??
+      f.JefedeZona ??
+      f.Jefe_x0020_de_x0020_Zona ??
+      f.JefeZonaLookupValue ??
+      "";
 
     return {
       Id: String(item?.id ?? ''),
       Title: f.Title,
-      Zona: f.Zona
+      Zona: f.Zona,
+      JefeZonaId: String(jefeZonaId || ""),
+      JefeZona: String(jefeZona || ""),
     };
   }
 }

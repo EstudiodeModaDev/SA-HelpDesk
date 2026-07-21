@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { RelacionadorState, SortDir, SortField, Ticket, ticketOption } from "../../../../Models/Tickets";
+import type { DateRange } from "../../../../Models/Commons";
 import { toISODateFlex } from "../../../../utils/Date";
-import type { DateRange, } from "../../../../Models/Commons";
 import { buildTicketsFilter } from "../shared/useTicketFilters";
 import { useAuth } from "../../../../Auth/authContext";
 import { useGraphServices } from "../../../../graph/GrapServicesContext";
@@ -9,19 +9,14 @@ import { relateTickets } from "../../utils/ticketRelation";
 import { useFiles } from "../../../Commons/hooks/useFiles";
 import { buildTicketsReportFilter } from "../../utils/ticketsFilters";
 import { usePermissions } from "../../../usePermissions";
+import { ESTADO_PENDIENTE_APROBACION } from "../../utils/ticketConstants";
 
-/**
- * Orquesta la bandeja principal de tickets.
- *
- * Expone filtros, ordenamiento, paginacion, metricas rapidas y acciones auxiliares
- * como relacionar tickets, agregar observador y preparar datos para reportes.
- */
 export function useTickets() {
-  const auth = useAuth()
+  const auth = useAuth();
   const graph = useGraphServices();
-  const files = useFiles()
-  const {engine} = usePermissions()
-  const viewAll = engine.can("tickets.view.all")
+  const files = useFiles();
+  const { engine } = usePermissions();
+  const viewAll = engine.can("tickets.view.all");
   const [rows, setRows] = React.useState<Ticket[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -32,9 +27,11 @@ export function useTickets() {
   const [pageSize, setPageSize] = React.useState<number>(10);
   const [pageIndex, setPageIndex] = React.useState<number>(1);
   const [nextLink, setNextLink] = React.useState<string | null>(null);
-  const [sorts, setSorts] = React.useState<Array<{ field: SortField; dir: SortDir }>>([{ field: "id", dir: "desc" },]);
+  const [sorts, setSorts] = React.useState<Array<{ field: SortField; dir: SortDir }>>([
+    { field: "id", dir: "desc" },
+  ]);
 
-  const [state, setState] = React.useState<RelacionadorState>({TicketRelacionar: null,});
+  const [state, setState] = React.useState<RelacionadorState>({ TicketRelacionar: null });
 
   const [ticketsAbiertos, setTicketsAbiertos] = React.useState<number>(0);
   const [ticketsFueraTiempo, setTicketsFueraTiempo] = React.useState<number>(0);
@@ -47,14 +44,14 @@ export function useTickets() {
   const buildFilter = React.useCallback(() => {
     return buildTicketsFilter({
       view: viewAll,
-      userMail: auth.account?.username!,
+      userMail: auth.account?.username ?? "",
       filterMode,
       range,
       pageSize,
       sorts,
       espacio,
       servicio: graph.tiendasZonas,
-      proveedor
+      proveedor,
     });
   }, [auth.account?.username, espacio, filterMode, graph.tiendasZonas, pageSize, range, sorts, viewAll, proveedor]);
 
@@ -64,7 +61,7 @@ export function useTickets() {
       fallbackIfEmptyTitle?: string;
       idPrefix?: string;
     }): Promise<ticketOption[]> => {
-      const {includeIdInLabel = true, fallbackIfEmptyTitle = "(Sin título)", idPrefix = "#",} = opts ?? {};
+      const { includeIdInLabel = true, fallbackIfEmptyTitle = "(Sin titulo)", idPrefix = "#" } = opts ?? {};
 
       const seen = new Set<string>();
       const { items } = await graph.Tickets.getAll({ orderby: "id desc" });
@@ -74,7 +71,7 @@ export function useTickets() {
         .map((t: any): ticketOption => {
           const id = String(t.ID);
           const title = (t.Title ?? "").trim() || fallbackIfEmptyTitle;
-          const label = includeIdInLabel ? `${title} — ID: ${idPrefix}${id}` : title;
+          const label = includeIdInLabel ? `${title} - ID: ${idPrefix}${id}` : title;
           return { value: id, label };
         })
         .filter((opt) => {
@@ -83,7 +80,7 @@ export function useTickets() {
           return true;
         });
     },
-    []
+    [graph.Tickets]
   );
 
   const loadFirstPage = React.useCallback(async () => {
@@ -113,14 +110,16 @@ export function useTickets() {
     try {
       let nextPage: string | null = null;
       const foundedTickets: Ticket[] = [];
-      const { items, nextLink } = await graph.Tickets.getAll({filter});
-      if(items?.length) foundedTickets.push(...items);
+      const { items, nextLink } = await graph.Tickets.getAll({ filter });
+      if (items?.length) foundedTickets.push(...items);
       nextPage = nextLink ?? null;
+
       while (nextPage) {
         const { items: newItems, nextLink: n2 } = await graph.Tickets.getByNextLink(nextPage);
-        if(newItems?.length) foundedTickets.push(...newItems);
+        if (newItems?.length) foundedTickets.push(...newItems);
         nextPage = n2 ?? null;
       }
+
       return foundedTickets;
     } catch (e: any) {
       setError(e?.message ?? "Error cargando tickets");
@@ -128,19 +127,28 @@ export function useTickets() {
     } finally {
       setLoading(false);
     }
-  }, [buildFilter]);
+  }, [graph.Tickets]);
 
   const loadCantidadResolutor = React.useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
+      const visibility =
+        `(fields/CorreoSolicitante eq '${auth.account?.username}' or ` +
+        `fields/CorreoObservador eq '${auth.account?.username}' or ` +
+        `fields/Correoresolutor eq '${auth.account?.username}')`;
+
       const { items: itemsAbiertos } = await graph.Tickets.getAll({
-        filter: `(fields/CorreoSolicitante eq '${auth.account?.username}' or fields/CorreoObservador eq '${auth.account?.username}' or fields/Correoresolutor eq '${auth.account?.username}') and fields/Estadodesolicitud eq 'En Atención'`,
+        filter:
+          `${visibility} and (` +
+          `fields/Estadodesolicitud eq 'En Atencion' or ` +
+          `fields/Estadodesolicitud eq 'En Atención' or ` +
+          `fields/Estadodesolicitud eq '${ESTADO_PENDIENTE_APROBACION}')`,
       });
 
       const { items: itemsFueraTiempo } = await graph.Tickets.getAll({
-        filter: `(fields/CorreoSolicitante eq '${auth.account?.username}' or fields/CorreoObservador eq '${auth.account?.username}' or fields/Correoresolutor eq '${auth.account?.username}') and fields/Estadodesolicitud eq 'Fuera de tiempo'`,
+        filter: `${visibility} and fields/Estadodesolicitud eq 'Fuera de tiempo'`,
       });
 
       setTicketsAbiertos(itemsAbiertos.length);
@@ -156,8 +164,8 @@ export function useTickets() {
   }, [graph.Tickets, auth.account?.username]);
 
   React.useEffect(() => {
-    loadFirstPage();
-    loadCantidadResolutor();
+    void loadFirstPage();
+    void loadCantidadResolutor();
   }, [loadFirstPage, loadCantidadResolutor]);
 
   const updateSelectedTicket = React.useCallback(
@@ -184,10 +192,10 @@ export function useTickets() {
 
       try {
         const res = await relateTickets(graph.Tickets, actualId, relatedId, type);
-        if (!res.ok) setError(res.message ?? "Error actualizando relación del ticket");
+        if (!res.ok) setError(res.message ?? "Error actualizando relacion del ticket");
         return { ok: res.ok };
       } catch (e: any) {
-        setError(e?.message ?? "Error actualizando relación del ticket");
+        setError(e?.message ?? "Error actualizando relacion del ticket");
         return { ok: false };
       } finally {
         setLoading(false);
@@ -210,14 +218,14 @@ export function useTickets() {
       setNextLink(n2 ?? null);
       setPageIndex((i) => i + 1);
     } catch (e: any) {
-      setError(e?.message ?? "Error cargando más tickets");
+      setError(e?.message ?? "Error cargando mas tickets");
     } finally {
       setLoading(false);
     }
   }, [nextLink, graph.Tickets]);
 
   const applyRange = React.useCallback(() => {
-    loadFirstPage();
+    void loadFirstPage();
   }, [loadFirstPage]);
 
   const toggleSort = React.useCallback((field: SortField, additive = false) => {
@@ -242,47 +250,48 @@ export function useTickets() {
     });
   }, []);
 
-  const loadToReport = React.useCallback(async (from: string, to: string,): Promise<Ticket[]> => {
+  const loadToReport = React.useCallback(
+    async (from: string, to: string): Promise<Ticket[]> => {
       setLoading(true);
 
       try {
-        const { items, } = await graph.Tickets.getAll( buildTicketsReportFilter(from, to,));
-        return items
-      } catch (e: any) {
-        return []
+        const { items } = await graph.Tickets.getAll(buildTicketsReportFilter(from, to));
+        return items;
+      } catch {
+        return [];
       } finally {
         setLoading(false);
       }
     },
-    []
+    [graph.Tickets]
   );
 
   const addObservador = React.useCallback(async (ticketId: string, correo: string, nombre: string) => {
     setLoading(true);
     setError(null);
-    try{
+    try {
       await graph.Tickets.update(ticketId, {
         CorreoObservador: correo,
         Observador: nombre,
-      })
-    } catch(e: any) {
+      });
+    } catch (e: any) {
       setError(e?.message ?? "Error asignando observador");
     } finally {
       setLoading(false);
     }
-  }, [])
+  }, [graph.Tickets]);
 
   const addProveedor = React.useCallback(async (ticketId: string, proveedorName: string) => {
     setLoading(true);
     setError(null);
-    try{
-      await graph.Tickets.update(ticketId, {Proveedor: proveedorName})
-    } catch(e: any) {
+    try {
+      await graph.Tickets.update(ticketId, { Proveedor: proveedorName });
+    } catch (e: any) {
       setError(e?.message ?? "Error asignando el proveedor");
     } finally {
       setLoading(false);
     }
-  }, [])
+  }, [graph.Tickets]);
 
   return {
     rows,
@@ -298,7 +307,6 @@ export function useTickets() {
     range,
     state,
     espacio,
-
     nextPage,
     setPageSize,
     setFilterMode,

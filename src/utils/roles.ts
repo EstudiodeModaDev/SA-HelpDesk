@@ -45,9 +45,9 @@ async function getUserIdByEmail(graph: GraphRest, email: string): Promise<string
       `/users/${encodeURIComponent(safe)}?$select=id`
     );
     if (user?.id) { setCache(uidCache, k, user.id); return user.id; }
-  } catch { /* continúa */ }
+  } catch { /* continua */ }
 
-  // 2) búsqueda por mail|UPN
+  // 2) busqueda por mail|UPN
   try {
     const esc = safe.replace(/'/g, "''");
     const filter = `mail eq '${esc}' or userPrincipalName eq '${esc}'`;
@@ -109,15 +109,12 @@ async function getGroupMemberIds(graph: GraphRest, groupId: string): Promise<str
     const resp = await graph.get<{ value: { id: string }[]; "@odata.nextLink"?: string }>(url);
     const items = resp.value ?? [];
     memberIds.push(...items.map(m => m.id));
-
-    // si tu GraphRest ya te devuelve solo `value` sin nextLink, puedes simplificar
     url = (resp as any)["@odata.nextLink"] ?? "";
   }
 
   groupMembersCache.set(groupId, memberIds);
   return memberIds;
 }
-
 
 export async function getRoleFromGroups(
   graph: GraphRest,
@@ -130,27 +127,23 @@ export async function getRoleFromGroups(
   const userId = await getUserIdByEmail(graph, safeEmail);
   if (!userId) return null;
 
-  // 1) sacar todos los groupIds de las reglas
   const groupIds = rules.map(r => r.groupId);
 
-  // 2) cargar miembros de todos los grupos (en paralelo)
   const membersByGroupEntries = await Promise.all(
     groupIds.map(async gid => {
-      const members = await getGroupMemberIds(graph, gid); 
-      console.table(members)
+      const members = await getGroupMemberIds(graph, gid);
       return [gid, members] as const;
     })
   );
 
   const membersByGroup = Object.fromEntries(membersByGroupEntries) as Record<string, string[]>;
 
-  // 3) buscar la primera regla cuyo grupo contenga al userId
   const matchedRule = rules.find(r => {
     const members = membersByGroup[r.groupId] ?? [];
     return members.includes(userId);
   });
 
-  if (!matchedRule) {return null};
+  if (!matchedRule) return null;
 
   return {
     role: matchedRule.role,
@@ -184,20 +177,19 @@ export async function getRoleFromSP(usuariosSvc: UsuariosSPService, email: strin
 }
 
 /* =========================
-   3) Resolver combinado (prioriza grupos → luego SP → default)
+   3) Resolver combinado (prioriza grupos -> luego SP -> default)
    ========================= */
 export async function resolveUserRole({graph, usuariosSvc, email, groupRules = [], singleGroup, defaultRole = "Usuario",}: {
   graph: GraphRest;
   usuariosSvc: UsuariosSPService;
   email: string | null | undefined;
   groupRules?: GroupRule[];
-  singleGroup?: { groupId: string; role: string }; // comodidad cuando es un solo grupo
+  singleGroup?: { groupId: string; role: string };
   defaultRole?: string;
 }): Promise<RoleDecision> {
   const safeEmail = String(email ?? "").trim().toLowerCase();
   if (!safeEmail) return { role: defaultRole, source: "default" };
 
-  // 1) Grupos (si hay graph)
   if (graph) {
     if (singleGroup?.groupId) {
       const byOne = await getRoleFromGroup(graph, safeEmail, singleGroup.groupId, singleGroup.role);
@@ -208,12 +200,10 @@ export async function resolveUserRole({graph, usuariosSvc, email, groupRules = [
     }
   }
 
-  // 2) Lista SP
   try {
     const bySp = await getRoleFromSP(usuariosSvc, safeEmail);
     if (bySp) return bySp;
   } catch { /* si SP falla, sigue default */ }
 
-  // 3) Default
   return { role: defaultRole, source: "default" };
 }

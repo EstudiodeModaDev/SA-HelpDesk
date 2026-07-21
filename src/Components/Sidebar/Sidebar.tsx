@@ -172,7 +172,7 @@ export function Sidebar(props: { selected: string; onSelect: (k: string) => void
           {!collapsed && (
             <div className="workspace-nav__profile-copy">
               <span className="workspace-nav__profile-name">{user?.displayName ?? "Usuario"}</span>
-              <span className="workspace-nav__profile-role">Administrador</span>
+              <span className="workspace-nav__profile-role">{user?.jobTitle ?? "Usuario"}</span>
             </div>
           )}
         </div>

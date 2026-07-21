@@ -8,12 +8,15 @@ import UsuariosApp from "../Components/Security/PermisosApp/PermisosApp";
 import TiendasZonasForm from "../Components/TiendasZonas/TiendasZonas";
 import Proveedor from "../Components/Proveedor/Proveedor";
 import HelpDeskForm from "../Components/HelpDesk/HelpDesk";
+import JefeZona from "../Components/JefeZona/JefeZona";
+import AprobacionesTickets from "../Components/Aprobaciones/Aprobaciones";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/home" element={<DashBoardPage/>} />
       <Route path="/tickets/nuevo" element={<NuevoTicketForm/>} />
+      <Route path="/tickets/aprobaciones" element={<AprobacionesTickets/>} />
       <Route path="/tickets" element={<TablaTickets/>} />
       <Route path="/helpdesk/nuevo" element={<HelpDeskForm/>} />
       <Route path="/metrics" element={<TicketsComplianceReport/>} />
@@ -21,6 +24,7 @@ export default function AppRoutes() {
       <Route path="/access" element={<UsuariosApp />} />
       <Route path="/tiendasZonas" element={<TiendasZonasForm />} />
       <Route path="/proveedores" element={<Proveedor />} />
+      <Route path="/jefes-zona" element={<JefeZona />} />
     </Routes>
   );
 }

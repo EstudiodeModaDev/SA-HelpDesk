@@ -102,7 +102,6 @@ function findById(nodes: readonly MenuItem[], id: string): MenuItem | undefined 
 function Shell() {
   const { ready, account, signIn, signOut } = useAuth();
   const [loadingAuth, setLoadingAuth] = React.useState(false);
-  const user: User = account ? { displayName: account.name ?? account.username ?? "Usuario", mail: account.username ?? "", jobTitle: "" } : null;
   const isLogged = Boolean(account);
 
   const handleAuthClick = async () => {
@@ -126,16 +125,23 @@ function Shell() {
     );
   }
 
-  return <LoggedApp user={user as User} />;
+  return <LoggedApp />;
 }
 
-function LoggedApp({ user }: { user: User }) {
+function LoggedApp() {
   const services = useGraphServices();
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const { engine, loading: permissionsLoading } = usePermissions();
+  const { engine, role, loading: permissionsLoading } = usePermissions();
   const auth = useAuth()
+  const user: User = auth.account
+    ? {
+        displayName: auth.account.name ?? auth.account.username ?? "Usuario",
+        mail: auth.account.username ?? "",
+        jobTitle: role,
+      }
+    : null;
 
   const navCtx = React.useMemo<NavContext>(() => {
     return {

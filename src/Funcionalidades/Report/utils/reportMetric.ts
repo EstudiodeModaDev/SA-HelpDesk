@@ -1,4 +1,5 @@
 import type { Ticket } from "../../../Models/Tickets";
+import { shouldExcludeTicketFromMetrics } from "../../Tickets/utils/ticketConstants";
 
 type ComplianceBucket = {
   total: number;
@@ -98,6 +99,9 @@ function buildGroupedMetrics<TKey extends string>(
 
 export function calculateComplianceMetrics(rows: Ticket[]): ComplianceMetrics {
   const now = new Date();
+  const validRows = rows.filter(
+    (row) => !shouldExcludeTicketFromMetrics(row.Estadodesolicitud)
+  );
 
   let closed = 0;
   let open = 0;
@@ -114,7 +118,7 @@ export function calculateComplianceMetrics(rows: Ticket[]): ComplianceMetrics {
   const categoriaMap = new Map<string, ComplianceBucket>();
   const proveedorMap = new Map<string, ComplianceBucket>();
 
-  for (const row of rows) {
+  for (const row of validRows) {
     const closedStatus = isClosedStatus(row.Estadodesolicitud);
     const deadline = toDate(row.TiempoSolucion);
     const updatedAt = toDate(row.UltimaActualizacion);
@@ -166,7 +170,7 @@ export function calculateComplianceMetrics(rows: Ticket[]): ComplianceMetrics {
   }
 
   return {
-    total: rows.length,
+    total: validRows.length,
     closed,
     open,
     compliancePct: safePct(closedOnTime, closed),

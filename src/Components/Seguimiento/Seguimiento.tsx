@@ -86,7 +86,7 @@ export default function TicketHistorial({ticketId, defaultTab = "solucion", clas
   }
 
   const estado = (ticket?.Estadodesolicitud ?? '').toLowerCase().trim();
-  const isClosed = estado.includes('Cerrado');
+  const isClosed = estado.includes('cerrado') || estado.includes('no aprobado');
 
   // =======================
   // Vista Detalle (historial)

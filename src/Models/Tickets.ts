@@ -3,7 +3,6 @@ import type { UserOption } from "./Commons";
 export type Ticket = {
   ID?: string;
   Nombreresolutor?: string;
-  IdResolutor?: string;
   Solicitante?: string;
   Title?: string; //Asunto
   FechaApertura?: string | null; // "dd/mm/yyyy hh:mm"

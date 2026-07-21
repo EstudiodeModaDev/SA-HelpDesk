@@ -133,7 +133,7 @@ export default function TicketsComplianceReport({
         </span>
 
         <span>
-          <strong>Tickets evaluados:</strong> {rows.length}
+          <strong>Tickets evaluados:</strong> {metrics.total}
         </span>
 
         {loading && (

@@ -2,12 +2,13 @@ import * as React from "react";
 import { useGraphServices } from "../../../graph/GrapServicesContext";
 import { useTiendasZonasData } from "./useUsuariosData";
 import { useTiendaZonaForm } from "./useUsuariosForm";
+import type { TiendaZona } from "../../../Models/TiendasZonas";
 
 /**
  * Agrupa el listado, las opciones y el alta de espacios fisicos o tiendas por zona.
  */
 export function useTiendasZonas() {
-  const graph = useGraphServices()
+  const graph = useGraphServices();
   const data = useTiendasZonasData();
   const form = useTiendaZonaForm();
 
@@ -19,7 +20,12 @@ export function useTiendasZonas() {
     data.setError(null);
 
     try {
-      await graph.tiendasZonas.create(form.state);
+      const payload: TiendaZona = {
+        Title: form.state.Title,
+        Zona: form.state.Zona,
+        JefeZonaId: form.state.JefeZonaId
+      } 
+      await graph.tiendasZonas.create(payload);
       await data.loadTiendasZonas();
       form.resetForm();
       return true;
@@ -29,7 +35,7 @@ export function useTiendasZonas() {
     } finally {
       form.setSubmitting(false);
     }
-  }, [, form, data]);
+  }, [graph, form, data]);
 
   return {
     tiendasZonas: data.tiendaZona,

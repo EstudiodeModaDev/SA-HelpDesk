@@ -91,7 +91,6 @@ export class TicketHelpdeskService {
 
       // Resolutor
       Nombreresolutor: f.Nombreresolutor ?? '',
-      IdResolutor: f.IdResolutor ?? '',
       Correoresolutor: f.Correoresolutor ?? '',
 
       // Solicitante

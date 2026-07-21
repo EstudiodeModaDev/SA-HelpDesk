@@ -1,5 +1,6 @@
 import React from "react";
 import type { TiendaZona } from "../../Models/TiendasZonas";
+import type { UserOption } from "../../Models/Commons";
 import CatalogTable, { type CatalogColumn } from "../Common/CatalogTable";
 
 type Props = {
@@ -7,6 +8,7 @@ type Props = {
   loading: boolean;
   error: string | null;
   zonas: { value: string; label: string }[];
+  jefesZonaOptions: UserOption[];
   onDelete: (id: string) => Promise<boolean>;
   reload: () => Promise<void>;
   onClose: () => void;
@@ -14,18 +16,30 @@ type Props = {
   setZona: (z: string) => void;
 };
 
-export default function TiendasZonasTabla({rows, loading, error, zonas, onDelete, reload, onClose, zona, setZona,}: Props) {
+export default function TiendasZonasTabla({rows, loading, error, zonas, jefesZonaOptions, onDelete, reload, onClose, zona, setZona,}: Props) {
   const sortedZonas = React.useMemo(
     () => [...zonas].sort((a, b) => a.value.localeCompare(b.value)),
     [zonas]
   );
+  const jefeZonaNameById = React.useMemo(() => {
+    return new Map(jefesZonaOptions.map((option) => [option.value, option.label]));
+  }, [jefesZonaOptions]);
 
   const columns = React.useMemo<CatalogColumn<TiendaZona>[]>(
     () => [
       { key: "title", header: "Nombre", render: (row) => row.Title },
       { key: "zona", header: "Zona", render: (row) => row.Zona },
+      {
+        key: "jefeZona",
+        header: "Jefe de Zona",
+        render: (row) =>
+          row.JefeZona ||
+          (row.JefeZonaId ? jefeZonaNameById.get(row.JefeZonaId) : "") ||
+          row.JefeZonaId ||
+          "Sin asignar",
+      },
     ],
-    []
+    [jefeZonaNameById]
   );
 
   const handleDelete = React.useCallback(

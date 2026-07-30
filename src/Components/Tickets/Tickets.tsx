@@ -20,6 +20,11 @@ function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; 
   );
 }
 
+function stripHtml(html: string): string {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
+}
+
 /**
  * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
  */
@@ -187,19 +192,9 @@ export default function TablaTickets() {
                 >
                   ID {renderSortIndicator("id", sorts)}
                 </th>
-                <th
-                  role="button"
-                  tabIndex={0}
-                  onClick={(e) => toggleSort("resolutor", e.shiftKey)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") toggleSort("resolutor", e.shiftKey);
-                  }}
-                  aria-label="Ordenar por Resolutor"
-                  style={{ cursor: "pointer", whiteSpace: "nowrap" }}
-                >
-                  Resolutor {renderSortIndicator("resolutor", sorts)}
+                <th>
+                  Descripción
                 </th>
-                <th>Solicitante</th>
                 <th
                   role="button"
                   tabIndex={0}
@@ -260,8 +255,7 @@ export default function TablaTickets() {
                   onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setTicketSeleccionado(ticket)}
                 >
                   <td>{ticket.ID}</td>
-                  <td><span title={ticket.Nombreresolutor}>{ticket.Nombreresolutor}</span></td>
-                  <td><span title={ticket.Solicitante}>{ticket.Solicitante}</span></td>
+                  <td><span title={ticket.Descripcion}>{stripHtml(ticket.Descripcion ?? "").slice(0, 70)}...</span></td>
                   <td><span title={ticket.Title}>{ticket.Title}</span></td>
                   <td>{toISODateTimeFlex(ticket.FechaApertura) || "–"}</td>
                   <td>{toISODateTimeFlex(ticket.TiempoSolucion) || "N/A"}</td>

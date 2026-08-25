@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import DashBoardPage from "../Components/DashBoard/DashboardPage";
 import NuevoTicketForm from "../Components/NuevoTicket/NuevoTicket";
 import TablaTickets from "../Components/Tickets/Tickets";
@@ -10,21 +10,23 @@ import Proveedor from "../Components/Proveedor/Proveedor";
 import HelpDeskForm from "../Components/HelpDesk/HelpDesk";
 import JefeZona from "../Components/JefeZona/JefeZona";
 import AprobacionesTickets from "../Components/Aprobaciones/Aprobaciones";
+import { RequirePermission } from "./RequirePermission";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/home" element={<DashBoardPage/>} />
-      <Route path="/tickets/nuevo" element={<NuevoTicketForm/>} />
-      <Route path="/tickets/aprobaciones" element={<AprobacionesTickets/>} />
-      <Route path="/tickets" element={<TablaTickets/>} />
-      <Route path="/helpdesk/nuevo" element={<HelpDeskForm/>} />
-      <Route path="/metrics" element={<TicketsComplianceReport/>} />
-      <Route path="/templates" element={<CrearPlantilla />} />
-      <Route path="/access" element={<UsuariosApp />} />
-      <Route path="/tiendasZonas" element={<TiendasZonasForm />} />
-      <Route path="/proveedores" element={<Proveedor />} />
-      <Route path="/jefes-zona" element={<JefeZona />} />
+      <Route path="/home" element={<RequirePermission><DashBoardPage/></RequirePermission>} />
+      <Route path="/tickets/nuevo" element={<RequirePermission><NuevoTicketForm/></RequirePermission>} />
+      <Route path="/tickets/aprobaciones" element={<RequirePermission><AprobacionesTickets/></RequirePermission>} />
+      <Route path="/tickets" element={<RequirePermission><TablaTickets/></RequirePermission>} />
+      <Route path="/helpdesk/nuevo" element={<RequirePermission><HelpDeskForm/></RequirePermission>} />
+      <Route path="/metrics" element={<RequirePermission><TicketsComplianceReport/></RequirePermission>} />
+      <Route path="/templates" element={<RequirePermission><CrearPlantilla /></RequirePermission>} />
+      <Route path="/access" element={<RequirePermission><UsuariosApp /></RequirePermission>} />
+      <Route path="/tiendasZonas" element={<RequirePermission><TiendasZonasForm /></RequirePermission>} />
+      <Route path="/proveedores" element={<RequirePermission><Proveedor /></RequirePermission>} />
+      <Route path="/jefes-zona" element={<RequirePermission><JefeZona /></RequirePermission>} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
 }

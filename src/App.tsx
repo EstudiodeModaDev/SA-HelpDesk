@@ -10,7 +10,7 @@ import { GraphServicesProvider, useGraphServices } from "./graph/GrapServicesCon
 import { useTheme } from "./Funcionalidades/Theme";
 import { Sidebar } from "./Components/Sidebar/Sidebar";
 import { type Permission } from "./config/permissions.config";
-import { usePermissions } from "./Funcionalidades/usePermissions";
+import { PermissionsProvider, usePermissionsContext } from "./Funcionalidades/PermissionsContext";
 import HeaderPrincipal from "./Components/Header/Header";
 import AppRoutes from "./Routes";
 import { navs } from "./Components/Sidebar/const";
@@ -125,7 +125,11 @@ function Shell() {
     );
   }
 
-  return <LoggedApp />;
+  return (
+    <PermissionsProvider>
+      <LoggedApp />
+    </PermissionsProvider>
+  );
 }
 
 function LoggedApp() {
@@ -133,7 +137,7 @@ function LoggedApp() {
   const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const { engine, role, loading: permissionsLoading } = usePermissions();
+  const { engine, role, loading: permissionsLoading } = usePermissionsContext();
   const auth = useAuth()
   const user: User = auth.account
     ? {

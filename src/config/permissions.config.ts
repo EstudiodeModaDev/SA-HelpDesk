@@ -5,7 +5,8 @@ export const PERMISSIONS = {
   VIEW_DASHBOARD: "dashboard.view",
   MANAGE_USERS: "users.manage",
   CREATE_TEMPLATE: "template.create",
-  TICKETS_CHANGE: "tickets.change"
+  TICKETS_CHANGE: "tickets.change",
+  VIEW_EXCEL: "excel.view"
 } as const;
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];

@@ -49,9 +49,7 @@ function buildRowState(draft: TicketDraft, categoria: Categoria, subcategoria: S
     Solicitante: draft.nombreSolicitante || draft.correoSolicitante || "",
     CorreoSolicitante: draft.correoSolicitante || "",
     Observador: "",
-    CorreoObservador: draft.correoObservador || "",
     Proveedor: draft.proveedor || "",
-    IdCasoPadre: draft.idCasoPadre || "",
     ANS: "",
     UltimaActualizacion: null,
   };

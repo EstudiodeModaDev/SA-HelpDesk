@@ -12,9 +12,7 @@ export const TICKETS_TEMPLATE_HEADERS = [
   "Descripcion",
   "Nombre solicitante",
   "Correo solicitante",
-  "Correo observador",
   "Proveedor",
-  "ID caso padre",
 ] as const;
 
 export type TicketDraftField =
@@ -24,9 +22,7 @@ export type TicketDraftField =
   | "descripcion"
   | "nombreSolicitante"
   | "correoSolicitante"
-  | "correoObservador"
   | "proveedor"
-  | "idCasoPadre";
 
 export type TicketDraft = Record<TicketDraftField, string>;
 
@@ -37,9 +33,7 @@ const HEADER_ALIASES: Record<TicketDraftField, string[]> = {
   descripcion: ["descripcion"],
   nombreSolicitante: ["nombre solicitante", "solicitante"],
   correoSolicitante: ["correo solicitante", "correo del solicitante", "email solicitante"],
-  correoObservador: ["correo observador", "correo del observador", "email observador"],
   proveedor: ["proveedor"],
-  idCasoPadre: ["id caso padre", "caso padre", "idcasopadre"],
 };
 
 function normalizeHeader(value: string): string {

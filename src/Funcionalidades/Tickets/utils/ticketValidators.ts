@@ -6,7 +6,7 @@ export function validateNuevoTicket(state: Partial<Ticket>): TicketErrors {
   const e: TicketErrors = {};
 
   if (!state.Title?.trim()) e.Title = "Ingrese el motivo";
-  if (state.Descripcion && state.Descripcion.length < 60) {
+  if (state.Descripcion && state.Descripcion.length < 20) {
     e.Descripcion = "La descripción debe tener minimo 60 caracteres";
   }
   if (!state.Descripcion?.trim()) e.Descripcion = "Describa el problema";

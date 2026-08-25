@@ -36,12 +36,10 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         env:
-          VITE_ENTRA_CLIENT_ID: ${{ vars.VITE_ENTRA_CLIENT_ID }}
-          VITE_ENTRA_TENANT_ID: ${{ vars.VITE_ENTRA_TENANT_ID }}
-          VITE_ENTRA_GRAPH_SCOPES: ${{ vars.VITE_ENTRA_GRAPH_SCOPES }}
-          VITE_ENTRA_API_SCOPES: ${{ vars.VITE_ENTRA_API_SCOPES }}
-          VITE_SUPABASE_EDGE_API_URL: ${{ vars.VITE_SUPABASE_EDGE_API_URL }}
-          VITE_SUPABASE_UPLOAD_INSUMO_URL: ${{ vars.VITE_SUPABASE_UPLOAD_INSUMO_URL }}
+        env:
+          VITE_ENTORNO: ${{ secrets.VITE_ENTORNO }}
+          VITE_SP_SITE_URL: ${{ secrets.VITE_SP_SITE_URL }}
+          VITE_TENANT_NAME: ${{ secrets.VITE_TENANT_NAME }}
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_VICTORIOUS_FIELD_074E1B00F }}
           action: "upload"

@@ -36,5 +36,9 @@ export function normalizeRoleLabel(value: string | null | undefined): AppRole {
 
 export function canBypassTicketApproval(groups: string[] | null | undefined): boolean {
   const safeGroups = new Set((groups ?? []).map((group) => String(group).trim()));
-  return safeGroups.has("SA-TICKETS-ADMINISTRADOR") || safeGroups.has("SA-TICKETS-RESOLUTOR");
+  return (
+    safeGroups.has("SA-TICKETS-ADMINISTRADOR") ||
+    safeGroups.has("SA-TICKETS-RESOLUTOR") ||
+    safeGroups.has("SA-TICKETS-JEFES-ZONA")
+  );
 }

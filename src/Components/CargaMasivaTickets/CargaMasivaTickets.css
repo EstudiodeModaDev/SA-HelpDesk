@@ -1,0 +1,50 @@
+.cmk-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cmk-file-input {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.cmk-file-name {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.cmk-result {
+  margin: 0 22px 22px;
+}
+
+.cmk-error-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+}
+
+.cmk-error-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.cmk-error-table th,
+.cmk-error-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--bd);
+  color: var(--ink);
+}
+
+.cmk-error-table th {
+  color: var(--muted);
+  font-weight: 700;
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+}
+
+.cmk-error-table tbody tr:last-child td {
+  border-bottom: none;
+}

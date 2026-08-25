@@ -153,6 +153,7 @@ export async function approvePendingTicket(params: {
     Correoresolutor: resolutor?.Correo ?? "",
     TiempoSolucion: tiempoSolucion,
     UltimaActualizacion: toGraphDateTime(apertura) ?? null,
+    FechaApertura: new Date().toISOString()
   });
 
   if (resolutor?.Correo) {
@@ -165,7 +166,11 @@ export async function approvePendingTicket(params: {
 
 export function shouldRequireApproval(groups: string[]): boolean {
   const safeGroups = new Set((groups ?? []).map((group) => String(group).trim()));
-  return !safeGroups.has("SA-TICKETS-ADMINISTRADOR") && !safeGroups.has("SA-TICKETS-RESOLUTOR");
+  return (
+    !safeGroups.has("SA-TICKETS-ADMINISTRADOR") &&
+    !safeGroups.has("SA-TICKETS-RESOLUTOR") &&
+    !safeGroups.has("SA-TICKETS-JEFES-ZONA")
+  );
 }
 
 export function getPendingApprovalStatus(): string {

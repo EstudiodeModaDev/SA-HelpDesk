@@ -10,6 +10,7 @@ import Proveedor from "../Components/Proveedor/Proveedor";
 import HelpDeskForm from "../Components/HelpDesk/HelpDesk";
 import JefeZona from "../Components/JefeZona/JefeZona";
 import AprobacionesTickets from "../Components/Aprobaciones/Aprobaciones";
+import CargaMasivaTickets from "../Components/CargaMasivaTickets/CargaMasivaTickets";
 import { RequirePermission } from "./RequirePermission";
 
 export default function AppRoutes() {
@@ -17,6 +18,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/home" element={<RequirePermission><DashBoardPage/></RequirePermission>} />
       <Route path="/tickets/nuevo" element={<RequirePermission><NuevoTicketForm/></RequirePermission>} />
+      <Route path="/tickets/carga-masiva" element={<RequirePermission><CargaMasivaTickets/></RequirePermission>} />
       <Route path="/tickets/aprobaciones" element={<RequirePermission><AprobacionesTickets/></RequirePermission>} />
       <Route path="/tickets" element={<RequirePermission><TablaTickets/></RequirePermission>} />
       <Route path="/helpdesk/nuevo" element={<RequirePermission><HelpDeskForm/></RequirePermission>} />

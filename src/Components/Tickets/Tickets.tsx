@@ -287,8 +287,9 @@ export default function TablaTickets() {
                   <td>{toISODateTimeFlex(ticket.FechaApertura) || "–"}</td>
                   <td>{toISODateTimeFlex(ticket.TiempoSolucion) || "N/A"}</td>
                   <td>
-                    {ticket.TiempoSolucion
-                      ? ` Quedan ${Math.floor(Number((new Date(ticket.TiempoSolucion).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} dias`
+                    {
+                      ticket.Estadodesolicitud?.toLocaleLowerCase().includes("cerrado") ? "Cerrado" :
+                      ticket.TiempoSolucion ? ` Quedan ${Math.floor(Number((new Date(ticket.TiempoSolucion).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)))} dias`
                       : "N/A"}
                   </td>
                   <td>

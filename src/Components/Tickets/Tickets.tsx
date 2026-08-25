@@ -7,6 +7,7 @@ import { calcularColorEstado } from "../../Funcionalidades/Tickets/utils/tickets
 import { useTickets } from "../../Funcionalidades/Tickets/hooks/Queries/useTickets";
 import { zonas } from "../../consts/zonasConst";
 import { useProveedores } from "../../Funcionalidades/Proveedores/hooks/useProveedores";
+import { useTiendasZonas } from "../../Funcionalidades/TiendasZonas/hooks/useTiendasZonas";
 
 function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; dir: SortDir }>) {
   const idx = sorts.findIndex((s) => s.field === field);
@@ -29,10 +30,20 @@ function stripHtml(html: string): string {
  * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
  */
 export default function TablaTickets() {
-  const {espacio, setEspacio, rows, loading: loadingTickets, error, filterMode, range, pageSize, pageIndex, hasNext, sorts, setFilterMode, setRange, setPageSize, updateSelectedTicket, nextPage, loadFirstPage, toggleSort, addObservador, proveedor, setProveedor} = useTickets();
+  const {espacio, setEspacio, rows, loading: loadingTickets, error, filterMode, range, pageSize, pageIndex, hasNext, sorts, setFilterMode, setRange, setPageSize, updateSelectedTicket, nextPage, loadFirstPage, toggleSort, addObservador, proveedor, setProveedor, tienda, setTienda} = useTickets();
   const { proveedoresOptions } = useProveedores();
+  const { tiendasZonas } = useTiendasZonas();
   const [search, setSearch] = React.useState("");
   const [ticketSeleccionado, setTicketSeleccionado] = React.useState<Ticket | null>(null);
+
+  const sortedTiendas = React.useMemo(() => {
+    const nombres = new Set<string>();
+    tiendasZonas.forEach((t) => {
+      const nombre = String(t.Title ?? "").trim();
+      if (nombre) nombres.add(nombre);
+    });
+    return Array.from(nombres).sort((a, b) => a.localeCompare(b));
+  }, [tiendasZonas]);
 
   const filtered = React.useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -73,6 +84,7 @@ export default function TablaTickets() {
     setEspacio("")
     setSearch("")
     setFilterMode("")
+    setTienda("")
   }, [])
 
   return (
@@ -134,6 +146,21 @@ export default function TablaTickets() {
                 {sortedZonas.map((item) => (
                   <option key={item.value} value={item.value}>
                     {item.label}
+                  </option>
+                ))}
+              </select>
+
+              <select
+                id="tiendas-tienda-filter"
+                className="ntk-input"
+                value={tienda}
+                onChange={(e) => setTienda(e.target.value ?? "")}
+                title="Tienda"
+              >
+                <option value="">Todas las tiendas</option>
+                {sortedTiendas.map((nombre) => (
+                  <option key={nombre} value={nombre}>
+                    {nombre}
                   </option>
                 ))}
               </select>

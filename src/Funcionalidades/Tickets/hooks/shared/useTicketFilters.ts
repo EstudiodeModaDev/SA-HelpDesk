@@ -29,9 +29,10 @@ export async function buildTicketsFilter(
     sorts: Array<{ field: SortField; dir: SortDir }>;
     servicio: TiendaZonaService;
     proveedor: string;
+    tienda: string;
   }
 ): Promise<GetAllOpts> {
-  const { view, userMail, filterMode, range, pageSize, sorts, espacio, servicio, proveedor } = params;
+  const { view, userMail, filterMode, range, pageSize, sorts, espacio, servicio, proveedor, tienda } = params;
 
   const filters: string[] = [];
   const isAdmin = view;
@@ -79,6 +80,10 @@ export async function buildTicketsFilter(
 
   if (proveedor) {
     filters.push(`fields/Proveedor eq '${escapeOData(proveedor)}'`);
+  }
+
+  if (tienda) {
+    filters.push(`fields/Title eq '${escapeOData(tienda)}'`);
   }
 
   const orderParts = sorts

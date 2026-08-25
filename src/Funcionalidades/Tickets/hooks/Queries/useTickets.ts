@@ -37,6 +37,7 @@ export function useTickets() {
   const [ticketsFueraTiempo, setTicketsFueraTiempo] = React.useState<number>(0);
   const [espacio, setEspacio] = React.useState<string>("");
   const [proveedor, setProveedor] = React.useState<string>("");
+  const [tienda, setTienda] = React.useState<string>("");
 
   const setField = <K extends keyof RelacionadorState>(k: K, v: RelacionadorState[K]) =>
     setState((s) => ({ ...s, [k]: v }));
@@ -52,8 +53,9 @@ export function useTickets() {
       espacio,
       servicio: graph.tiendasZonas,
       proveedor,
+      tienda,
     });
-  }, [auth.account?.username, espacio, filterMode, graph.tiendasZonas, pageSize, range, sorts, viewAll, proveedor]);
+  }, [auth.account?.username, espacio, filterMode, graph.tiendasZonas, pageSize, range, sorts, viewAll, proveedor, tienda]);
 
   const toTicketOptions = React.useCallback(
     async (opts?: {
@@ -327,5 +329,7 @@ export function useTickets() {
     setEspacio,
     proveedor,
     setProveedor,
+    tienda,
+    setTienda,
   };
 }

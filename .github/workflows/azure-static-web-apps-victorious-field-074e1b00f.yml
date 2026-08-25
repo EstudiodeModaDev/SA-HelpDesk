@@ -36,7 +36,6 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         env:
-        env:
           VITE_ENTORNO: ${{ secrets.VITE_ENTORNO }}
           VITE_SP_SITE_URL: ${{ secrets.VITE_SP_SITE_URL }}
           VITE_TENANT_NAME: ${{ secrets.VITE_TENANT_NAME }}

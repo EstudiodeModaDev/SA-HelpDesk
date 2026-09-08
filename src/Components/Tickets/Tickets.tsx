@@ -75,7 +75,7 @@ export default function TablaTickets() {
     setRange({from: "", to: ""})
     setEspacio("")
     setSearch("")
-    setFilterMode("")
+    setFilterMode("En curso")
     setTienda("")
     setProveedor("")
   }, [])

@@ -77,6 +77,7 @@ export default function TablaTickets() {
     setSearch("")
     setFilterMode("")
     setTienda("")
+    setProveedor("")
   }, [])
 
   return (

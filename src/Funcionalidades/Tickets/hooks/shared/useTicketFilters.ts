@@ -1,5 +1,5 @@
 import type { DateRange, GetAllOpts } from "../../../../Models/Commons";
-import type { SortDir, SortField } from "../../../../Models/Tickets";
+import type { SortDir, SortField, Ticket } from "../../../../Models/Tickets";
 import type { TiendaZona } from "../../../../Models/TiendasZonas";
 import type { TiendaZonaService } from "../../../../services/TiendasZonas.Service";
 import { escapeOData } from "../../../../utils/Commons";
@@ -102,6 +102,64 @@ export async function buildTicketsFilter(
     orderby: orderParts.join(","),
     top: pageSize,
   };
+}
+
+/**
+ * Re-aplica en cliente las mismas reglas de negocio de buildTicketsFilter, pero sobre un
+ * conjunto acotado de tickets ya resueltos por ID (candidatos de busqueda por texto libre).
+ * Necesario porque Graph no soporta filtrar $filter por el id de un list item de SharePoint.
+ */
+export function ticketMatchesFilters(
+  ticket: Ticket,
+  params: {
+    view: boolean;
+    userMail: string;
+    filterMode: string;
+    range: DateRange;
+    proveedor: string;
+    tienda: string;
+  },
+  tiendasEnZona?: Set<string>
+): boolean {
+  const { view, userMail, filterMode, range, proveedor, tienda } = params;
+  const isAdmin = view;
+
+  if (!isAdmin) {
+    const mail = String(userMail ?? "");
+    const visible =
+      ticket.CorreoSolicitante === mail ||
+      ticket.CorreoObservador === mail ||
+      ticket.Correoresolutor === mail;
+    if (!visible) return false;
+  }
+
+  const estado = ticket.Estadodesolicitud ?? "";
+  if (filterMode === "En curso") {
+    const enCurso =
+      estado === ESTADO_EN_ATENCION ||
+      estado === "En Atención" ||
+      estado === ESTADO_FUERA_TIEMPO ||
+      estado === ESTADO_PENDIENTE_APROBACION;
+    if (!enCurso) return false;
+  } else if (filterMode !== "Todos") {
+    const cerrado = estado.startsWith("Cerrado") || estado === ESTADO_NO_APROBADO;
+    if (!cerrado) return false;
+  }
+
+  if (tiendasEnZona && !tiendasEnZona.has(String(ticket.Title ?? "").trim())) {
+    return false;
+  }
+
+  if (range.from && range.to && range.from < range.to) {
+    const solucion = ticket.TiempoSolucion ?? "";
+    if (!solucion) return false;
+    if (solucion < `${range.from}T00:00:00Z` || solucion > `${range.to}T23:59:59Z`) return false;
+  }
+
+  if (proveedor && ticket.Proveedor !== proveedor) return false;
+  if (tienda && ticket.Title !== tienda) return false;
+
+  return true;
 }
 
 export async function getShopsByZone(params: { zona: string }, servicio: TiendaZonaService): Promise<TiendaZona[]> {

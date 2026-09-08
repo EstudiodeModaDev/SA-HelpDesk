@@ -30,10 +30,9 @@ function stripHtml(html: string): string {
  * Renderiza la bandeja principal de tickets con filtros, ordenamiento y acceso al detalle.
  */
 export default function TablaTickets() {
-  const {espacio, setEspacio, rows, loading: loadingTickets, error, filterMode, range, pageSize, pageIndex, hasNext, sorts, setFilterMode, setRange, setPageSize, updateSelectedTicket, nextPage, loadFirstPage, toggleSort, addObservador, proveedor, setProveedor, tienda, setTienda} = useTickets();
+  const {espacio, setEspacio, rows, loading: loadingTickets, error, filterMode, range, pageSize, pageIndex, hasNext, sorts, setFilterMode, setRange, setPageSize, updateSelectedTicket, nextPage, loadFirstPage, toggleSort, addObservador, proveedor, setProveedor, tienda, setTienda, search, setSearch} = useTickets();
   const { proveedoresOptions } = useProveedores();
   const { tiendasZonas } = useTiendasZonas();
-  const [search, setSearch] = React.useState("");
   const [ticketSeleccionado, setTicketSeleccionado] = React.useState<Ticket | null>(null);
 
   const sortedTiendas = React.useMemo(() => {
@@ -45,14 +44,7 @@ export default function TablaTickets() {
     return Array.from(nombres).sort((a, b) => a.localeCompare(b));
   }, [tiendasZonas]);
 
-  const filtered = React.useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter((t) => {
-      const texto = `${t.Nombreresolutor ?? ""} ${t.Solicitante ?? ""} ${t.Title ?? ""} ${t.ID}`.toLowerCase();
-      return texto.includes(q);
-    });
-  }, [rows, search]);
+  const filtered = rows;
 
   const sortedZonas = React.useMemo(
     () => [...zonas].sort((a, b) => a.value.localeCompare(b.value)),

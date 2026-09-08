@@ -2,7 +2,7 @@ import * as React from "react";
 import type { RelacionadorState, SortDir, SortField, Ticket, ticketOption } from "../../../../Models/Tickets";
 import type { DateRange } from "../../../../Models/Commons";
 import { toISODateFlex } from "../../../../utils/Date";
-import { buildTicketsFilter } from "../shared/useTicketFilters";
+import { buildTicketsFilter, getShopsByZone, ticketMatchesFilters } from "../shared/useTicketFilters";
 import { useAuth } from "../../../../Auth/authContext";
 import { useGraphServices } from "../../../../graph/GrapServicesContext";
 import { relateTickets } from "../../utils/ticketRelation";
@@ -38,6 +38,14 @@ export function useTickets() {
   const [espacio, setEspacio] = React.useState<string>("");
   const [proveedor, setProveedor] = React.useState<string>("");
   const [tienda, setTienda] = React.useState<string>("");
+
+  const [search, setSearch] = React.useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = React.useState<string>("");
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search.trim()), 350);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   const setField = <K extends keyof RelacionadorState>(k: K, v: RelacionadorState[K]) =>
     setState((s) => ({ ...s, [k]: v }));
@@ -85,11 +93,55 @@ export function useTickets() {
     [graph.Tickets]
   );
 
+  // Graph no soporta $filter por el id de un list item de SharePoint, asi que una busqueda
+  // por texto libre no puede resolverse con OData: se obtienen IDs candidatos (Microsoft Search,
+  // o directo si el texto es numerico) y se consultan uno a uno via GET /items/{id}, acotado a un
+  // puñado de resultados, sin traer toda la lista al cliente.
+  const loadSearchResults = React.useCallback(async (term: string) => {
+    const ids = /^\d+$/.test(term) ? [term] : await graph.Tickets.searchIds(term);
+
+    const fetched = await Promise.all(
+      ids.map((id) => graph.Tickets.get(id).catch(() => null))
+    );
+
+    const tiendasEnZona = espacio
+      ? new Set(
+          (await getShopsByZone({ zona: espacio }, graph.tiendasZonas))
+            .map((t) => String(t.Title ?? "").trim())
+            .filter(Boolean)
+        )
+      : undefined;
+
+    return fetched.filter((t): t is Ticket => {
+      if (!t) return false;
+      return ticketMatchesFilters(
+        t,
+        {
+          view: viewAll,
+          userMail: auth.account?.username ?? "",
+          filterMode,
+          range,
+          proveedor,
+          tienda,
+        },
+        tiendasEnZona
+      );
+    });
+  }, [graph.Tickets, graph.tiendasZonas, espacio, viewAll, auth.account?.username, filterMode, range, proveedor, tienda]);
+
   const loadFirstPage = React.useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
+      if (debouncedSearch) {
+        const items = await loadSearchResults(debouncedSearch);
+        setRows(items);
+        setNextLink(null);
+        setPageIndex(1);
+        return;
+      }
+
       const filter = await buildFilter();
       const { items, nextLink } = await graph.Tickets.getAll(filter);
       setRows(items);
@@ -103,7 +155,7 @@ export function useTickets() {
     } finally {
       setLoading(false);
     }
-  }, [buildFilter, graph.Tickets]);
+  }, [buildFilter, graph.Tickets, debouncedSearch, loadSearchResults]);
 
   const allTickets = React.useCallback(async (filter: string): Promise<Ticket[]> => {
     setLoading(true);
@@ -331,5 +383,7 @@ export function useTickets() {
     setProveedor,
     tienda,
     setTienda,
+    search,
+    setSearch,
   };
 }

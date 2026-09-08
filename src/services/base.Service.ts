@@ -15,6 +15,7 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
 
   private siteId?: string;
   private listId?: string;
+  private listWebUrl?: string;
 
   constructor(
     graph: GraphRest,
@@ -46,6 +47,7 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
       const parsed = JSON.parse(raw);
       this.siteId = parsed?.siteId || this.siteId;
       this.listId = parsed?.listId || this.listId;
+      this.listWebUrl = parsed?.listWebUrl || this.listWebUrl;
     } catch {
       // ignore
     }
@@ -58,6 +60,7 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
         JSON.stringify({
           siteId: this.siteId,
           listId: this.listId,
+          listWebUrl: this.listWebUrl,
         })
       );
     } catch {
@@ -79,7 +82,7 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
       this.saveCache();
     }
 
-    if (!this.listId) {
+    if (!this.listId || !this.listWebUrl) {
       const lists = await this.graph.get<any>(
         `/sites/${this.siteId}/lists?$filter=displayName eq '${this.esc(this.listName)}'`
       );
@@ -90,6 +93,7 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
       }
 
       this.listId = list.id;
+      this.listWebUrl = list.webUrl;
       this.saveCache();
     }
   }
@@ -164,6 +168,54 @@ export abstract class BaseSharePointListService<TModel, TCreate = Omit<TModel, "
     const nextLink = res?.["@odata.nextLink"] ? String(res["@odata.nextLink"]) : null;
 
     return { items, nextLink };
+  }
+
+  /**
+   * Busca coincidencias de texto libre en la lista completa usando Microsoft Search
+   * (índice de búsqueda, sin el límite de 5000 items de una vista de lista) y devuelve
+   * los IDs candidatos. La autorización/visibilidad se sigue resolviendo con el $filter
+   * OData existente sobre estos IDs, nunca con el resultado crudo de Search.
+   */
+  async searchIds(term: string, opts?: { size?: number }): Promise<string[]> {
+    await this.ensureIds();
+
+    const words = term
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((w) => `${w.replace(/["*]/g, "")}*`);
+
+    if (!words.length || !this.listWebUrl) return [];
+
+    const queryString = `${words.join(" ")} AND path:"${this.listWebUrl}"`;
+
+    const body = {
+      requests: [
+        {
+          entityTypes: ["listItem"],
+          query: { queryString },
+          from: 0,
+          size: opts?.size ?? 20,
+          fields: ["ID"],
+        },
+      ],
+    };
+
+    const res = await this.graph.post<any>("/search/query", body);
+    const hits = res?.value?.[0]?.hitsContainers?.[0]?.hits ?? [];
+
+    const ids = hits
+      .map((h: any) =>
+        String(
+          h?.resource?.fields?.ID ??
+            h?.resource?.sharepointIds?.listItemId ??
+            h?.resource?.id ??
+            ""
+        )
+      )
+      .filter((id: string) => /^\d+$/.test(id));
+
+    return Array.from(new Set(ids));
   }
 
   async getAllPlain(opts?: GetAllOpts): Promise<TModel[]> {

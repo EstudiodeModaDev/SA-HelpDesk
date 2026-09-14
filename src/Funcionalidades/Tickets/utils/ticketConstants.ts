@@ -13,6 +13,10 @@ export const ESTADO_CERRADO = "Cerrado";
 export const ESTADO_CERRADO_FUERA_TIEMPO = "Cerrado fuera de tiempo";
 export const ESTADO_NO_APROBADO = "Cerrado - No aprobado";
 
+export const SIN_PROVEEDOR_VALUE = "__SIN_PROVEEDOR__";
+
+export const FILTRO_SIN_APROBACION = "Sin aprobación";
+
 export function normalizeStatus(value?: string | null): string {
   return String(value ?? "")
     .normalize("NFD")

@@ -5,8 +5,9 @@ import type { Holiday } from "festivos-colombianos";
 export type ANSLevel = 'ANS 1' | 'ANS 2' | 'ANS 3' | 'ANS 4' | 'ANS 5' | '';
 
 const TIMEZONE = "America/Bogota";
-const WORK_START = 7;  
-const WORK_END = 17;  
+const WORK_START = 7;
+const WORK_END = 17;
+const HOURS_PER_BUSINESS_DAY = WORK_END - WORK_START;
 
 
 const toYMD = (d: Date) => {
@@ -114,6 +115,16 @@ export function calcularFechaSolucion(
 
   console.log("Fecha de solucion ", actual)
   return actual;
+}
+
+/** Formatea las horas habiles del ANS como horas y su equivalente en dias habiles (jornada 7am-5pm). */
+export function formatHorasHabiles(horasAns: number): string {
+  if (!horasAns || horasAns <= 0) return "No aplica";
+
+  const dias = horasAns / HOURS_PER_BUSINESS_DAY;
+  const diasLabel = Number.isInteger(dias) ? String(dias) : dias.toFixed(1);
+
+  return `${horasAns} horas habiles (~${diasLabel} dias habiles)`;
 }
 
 const KEYWORDS: Record<Exclude<ANSLevel, ''>, string[]> = {

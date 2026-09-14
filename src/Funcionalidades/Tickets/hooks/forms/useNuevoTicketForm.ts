@@ -9,7 +9,7 @@ import { useTicketHolidays } from "../shared/useTicketHolidays";
 import { useTicketCatalogos } from "../shared/useTicketCatalogos";
 import { validateNuevoTicket } from "../../utils/ticketValidators";
 import { horasPorANS } from "../../utils/ticketConstants";
-import { calcularFechaSolucion } from "../../../../utils/Ans";
+import { calcularFechaSolucion, formatHorasHabiles } from "../../../../utils/Ans";
 import { buildNuevoTicketPayload } from "../../utils/ticketPayloads";
 import { logTicketCreated } from "../../../Log/utils/ticketsLogs";
 import {
@@ -131,12 +131,14 @@ export function useNuevoTicketForm() {
           );
         }
 
+        const horasLabel = formatHorasHabiles(horasAns);
+
         if (created.CorreoSolicitante) {
-          await notifyTicketPendingApprovalSolicitante(graph.mail, created);
+          await notifyTicketPendingApprovalSolicitante(graph.mail, created, horasLabel);
         }
 
         if (approvalTarget?.correoJefeZona) {
-          await notifyTicketPendingApprovalJefeZona(graph.mail, created, approvalTarget);
+          await notifyTicketPendingApprovalJefeZona(graph.mail, created, approvalTarget, horasLabel);
         }
       } else {
         await increaseResolverCaseCount(graph.Usuarios, payload.Correoresolutor);

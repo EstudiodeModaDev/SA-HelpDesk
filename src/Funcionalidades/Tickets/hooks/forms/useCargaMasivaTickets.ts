@@ -8,7 +8,7 @@ import { useTicketHolidays } from "../shared/useTicketHolidays";
 import { useTicketCatalogos } from "../shared/useTicketCatalogos";
 import { validateNuevoTicket } from "../../utils/ticketValidators";
 import { horasPorANS } from "../../utils/ticketConstants";
-import { calcularFechaSolucion } from "../../../../utils/Ans";
+import { calcularFechaSolucion, formatHorasHabiles } from "../../../../utils/Ans";
 import { buildNuevoTicketPayload } from "../../utils/ticketPayloads";
 import { logTicketCreated } from "../../../Log/utils/ticketsLogs";
 import {
@@ -164,11 +164,13 @@ export function useCargaMasivaTickets() {
             }
 
             try {
+              const horasLabel = formatHorasHabiles(horasAns);
+
               if (createdTicket.CorreoSolicitante) {
-                await notifyTicketPendingApprovalSolicitante(graph.mail, createdTicket);
+                await notifyTicketPendingApprovalSolicitante(graph.mail, createdTicket, horasLabel);
               }
               if (approvalTarget?.correoJefeZona) {
-                await notifyTicketPendingApprovalJefeZona(graph.mail, createdTicket, approvalTarget);
+                await notifyTicketPendingApprovalJefeZona(graph.mail, createdTicket, approvalTarget, horasLabel);
               }
             } catch (notifyErr) {
               console.error("Error notificando aprobacion pendiente:", notifyErr);

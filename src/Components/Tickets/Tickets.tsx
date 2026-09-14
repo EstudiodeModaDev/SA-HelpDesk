@@ -8,6 +8,8 @@ import { useTickets } from "../../Funcionalidades/Tickets/hooks/Queries/useTicke
 import { zonas } from "../../consts/zonasConst";
 import { useProveedores } from "../../Funcionalidades/Proveedores/hooks/useProveedores";
 import { useTiendasZonas } from "../../Funcionalidades/TiendasZonas/hooks/useTiendasZonas";
+import { exportTicketsToExcel } from "../../Funcionalidades/Report/utils/exportExcel";
+import { FILTRO_SIN_APROBACION, SIN_PROVEEDOR_VALUE } from "../../Funcionalidades/Tickets/utils/ticketConstants";
 
 function renderSortIndicator(field: SortField, sorts: Array<{ field: SortField; dir: SortDir }>) {
   const idx = sorts.findIndex((s) => s.field === field);
@@ -80,6 +82,12 @@ export default function TablaTickets() {
     setProveedor("")
   }, [])
 
+  const handleExportExcel = React.useCallback(() => {
+    if (filtered.length === 0) return;
+    const fecha = new Date().toISOString().slice(0, 10);
+    exportTicketsToExcel(filtered, { fileName: `BandejaTickets_${fecha}.xlsx` });
+  }, [filtered]);
+
   return (
     <div className="tabla-tickets">
       {!ticketSeleccionado && (
@@ -88,6 +96,15 @@ export default function TablaTickets() {
             <div className="tickets-hero__copy">
               <span className="tickets-hero__eyebrow">Gestión operativa</span>
               <h2 className="tickets-hero__title">Bandeja de tickets</h2>
+              <button
+                type="button"
+                className="tickets-hero__export"
+                onClick={handleExportExcel}
+                disabled={loadingTickets || filtered.length === 0}
+                title="Exportar los tickets mostrados a Excel"
+              >
+                Exportar a Excel
+              </button>
             </div>
 
             <div className="tickets-hero__stats">
@@ -119,6 +136,7 @@ export default function TablaTickets() {
             <div className="tickets-filtros__group">
               <select value={proveedor} onChange={(e) => setProveedor(e.target.value as any)} title="Proveedor">
                 <option value="En curso">Escoja un proveedor</option>
+                <option value={SIN_PROVEEDOR_VALUE}>Sin proveedor asignado</option>
                 {proveedoresOptions.map((p) => (
                   <option key={p.value} value={p.label}>{p.label}</option>
                 ))}
@@ -126,6 +144,7 @@ export default function TablaTickets() {
 
               <select value={filterMode} onChange={(e) => setFilterMode(e.target.value as any)} title="Estado">
                 <option value="En curso">En curso</option>
+                <option value={FILTRO_SIN_APROBACION}>{FILTRO_SIN_APROBACION}</option>
                 <option value="Cerrados">Cerrados</option>
                 <option value="Todos">Todos</option>
               </select>

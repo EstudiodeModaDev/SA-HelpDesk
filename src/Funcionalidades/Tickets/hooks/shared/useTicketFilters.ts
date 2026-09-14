@@ -8,6 +8,8 @@ import {
   ESTADO_FUERA_TIEMPO,
   ESTADO_NO_APROBADO,
   ESTADO_PENDIENTE_APROBACION,
+  FILTRO_SIN_APROBACION,
+  SIN_PROVEEDOR_VALUE,
 } from "../../utils/ticketConstants";
 
 export const sortFieldToOData: Record<SortField, string> = {
@@ -51,8 +53,12 @@ export async function buildTicketsFilter(
     filters.push(
       `(fields/Estadodesolicitud eq '${ESTADO_EN_ATENCION}' or ` +
       `fields/Estadodesolicitud eq 'En Atención' or ` +
-      `fields/Estadodesolicitud eq '${ESTADO_FUERA_TIEMPO}' or ` +
-      `fields/Estadodesolicitud eq '${ESTADO_PENDIENTE_APROBACION}')`
+      `fields/Estadodesolicitud eq '${ESTADO_FUERA_TIEMPO}')`
+    );
+  } else if (filterMode === FILTRO_SIN_APROBACION) {
+    filters.push(
+      `(fields/Estadodesolicitud eq '${ESTADO_PENDIENTE_APROBACION}' or ` +
+      `fields/Estadodesolicitud eq '${ESTADO_NO_APROBADO}')`
     );
   } else if (filterMode !== "Todos") {
     filters.push(
@@ -78,7 +84,9 @@ export async function buildTicketsFilter(
     filters.push(`fields/TiempoSolucion le '${range.to}T23:59:59Z'`);
   }
 
-  if (proveedor) {
+  if (proveedor === SIN_PROVEEDOR_VALUE) {
+    filters.push(`(fields/Proveedor eq null or fields/Proveedor eq '')`);
+  } else if (proveedor) {
     filters.push(`fields/Proveedor eq '${escapeOData(proveedor)}'`);
   }
 
@@ -138,9 +146,12 @@ export function ticketMatchesFilters(
     const enCurso =
       estado === ESTADO_EN_ATENCION ||
       estado === "En Atención" ||
-      estado === ESTADO_FUERA_TIEMPO ||
-      estado === ESTADO_PENDIENTE_APROBACION;
+      estado === ESTADO_FUERA_TIEMPO;
     if (!enCurso) return false;
+  } else if (filterMode === FILTRO_SIN_APROBACION) {
+    const sinAprobacion =
+      estado === ESTADO_PENDIENTE_APROBACION || estado === ESTADO_NO_APROBADO;
+    if (!sinAprobacion) return false;
   } else if (filterMode !== "Todos") {
     const cerrado = estado.startsWith("Cerrado") || estado === ESTADO_NO_APROBADO;
     if (!cerrado) return false;
@@ -156,7 +167,11 @@ export function ticketMatchesFilters(
     if (solucion < `${range.from}T00:00:00Z` || solucion > `${range.to}T23:59:59Z`) return false;
   }
 
-  if (proveedor && ticket.Proveedor !== proveedor) return false;
+  if (proveedor === SIN_PROVEEDOR_VALUE) {
+    if (ticket.Proveedor) return false;
+  } else if (proveedor && ticket.Proveedor !== proveedor) {
+    return false;
+  }
   if (tienda && ticket.Title !== tienda) return false;
 
   return true;

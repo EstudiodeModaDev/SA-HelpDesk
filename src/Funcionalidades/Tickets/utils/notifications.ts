@@ -63,7 +63,7 @@ export async function notifyTicketCreatedResolutor(mail: MailService, ticket: Ti
   });
 }
 
-export async function notifyTicketPendingApprovalJefeZona(mail: MailService, ticket: Ticket, approvalTarget: ApprovalTarget): Promise<void> {
+export async function notifyTicketPendingApprovalJefeZona(mail: MailService, ticket: Ticket, approvalTarget: ApprovalTarget, horas: string): Promise<void> {
   const address = (approvalTarget.correoJefeZona ?? "").trim();
   const approvalUrl = `${appUrl}tickets/aprobaciones?ticketId=${ticket.ID}`;
   if (!address) {
@@ -119,6 +119,15 @@ export async function notifyTicketPendingApprovalJefeZona(mail: MailService, tic
               ${ticket.Title ?? "—"}
             </td>
           </tr>
+
+          <tr>
+            <td style="padding:10px;background:#f9fafb;font-weight:bold;border:1px solid #e5e7eb;">
+              Horas habiles para resolución
+            </td>
+            <td style="padding:10px;border:1px solid #e5e7eb;">
+              ${horas}
+            </td>
+          </tr>
         </table>
 
         <p>
@@ -162,7 +171,7 @@ export async function notifyTicketPendingApprovalJefeZona(mail: MailService, tic
   });
 }
 
-export async function notifyTicketPendingApprovalSolicitante(mail: MailService, ticket: Ticket): Promise<void> {
+export async function notifyTicketPendingApprovalSolicitante(mail: MailService, ticket: Ticket, horas: string): Promise<void> {
   const address = (ticket.CorreoSolicitante ?? "").trim();
   if (!address) {
     throw new Error("notifyTicketPendingApprovalSolicitante: correo del solicitante invalido");
@@ -173,7 +182,8 @@ export async function notifyTicketPendingApprovalSolicitante(mail: MailService, 
     <p>Tu ticket fue registrado y quedo pendiente de aprobacion por parte del jefe de zona.</p>
     <p><strong>ID del caso:</strong> ${ticket.ID}</p>
     <p><strong>Espacio fisico:</strong> ${ticket.Title ?? "—"}</p>
-    <p>Recibiras una nueva notificacion cuando el proceso finalice.</p>
+    <p><strong>Horas habiles para resolución:</strong> ${horas}</p>
+    <p>Recibiras una nueva notificacion cuando el proceso finalice. El tiempo de resolucion empezara a contar una vez el ticket sea aprobado.</p>
   `.trim();
 
   await mail.sendEmail({

@@ -36,10 +36,10 @@ export function CaseDetail({ ticket, onVolver, onDocumentar }: Props) {
   const ticketAttachment = useTicketsAttachmentsList();
   const { proveedoresOptions } = useProveedores();
   const { addProveedor, loadFirstPage, updateSelectedTicket } = useTickets();
-  const proveedorMailController = useProveedoresMail(ticket);
 
   const [selected, setSelected] = React.useState<Ticket>(ticket);
   const [attachments, setAttachments] = React.useState<Archivo[]>([]);
+  const proveedorMailController = useProveedoresMail(ticket, attachments);
   const [showProveedor, setProveedor] = React.useState(false);
   const [showObservador, setShowObservador] = React.useState(false);
   const [showRecategorizar, setShowRecategorizar] = React.useState(false);
@@ -339,6 +339,7 @@ export function CaseDetail({ ticket, onVolver, onDocumentar }: Props) {
             state={proveedorMailController.state}
             handleAddFiles={proveedorMailController.handleAddFiles}
             handleRemoveFiles={proveedorMailController.handleRemoveFile}
+            ticketAttachments={attachments}
           />
         </div>
       )}

@@ -87,7 +87,7 @@ export const fileToBase64 = (file: Blob): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-export function fileToBasePA64(file: File): Promise<string> {
+export function fileToBasePA64(file: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const fr = new FileReader();
     fr.readAsDataURL(file);

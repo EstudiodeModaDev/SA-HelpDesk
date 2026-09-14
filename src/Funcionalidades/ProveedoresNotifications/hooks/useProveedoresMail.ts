@@ -5,11 +5,12 @@ import type {
   GraphRecipient,
   GraphSendMailPayload,
 } from "../../../graph/GraphRest";
+import type { Archivo } from "../../../Models/Attachments";
 import type { Ticket } from "../../../Models/Tickets";
 import { fileToBasePA64,  } from "../../../utils/Commons";
 import { useProveedoresMailForm } from "./useProveedoresMailForm";
 
-export function useProveedoresMail(ticket: Ticket) {
+export function useProveedoresMail(ticket: Ticket, ticketAttachments: Archivo[] = []) {
   const graph = useGraphServices();
   const form = useProveedoresMailForm(ticket);
 
@@ -29,7 +30,7 @@ export function useProveedoresMail(ticket: Ticket) {
       },
     ];
 
-    const attachments: GraphFileAttachment[] = await Promise.all(
+    const manualAttachments: GraphFileAttachment[] = await Promise.all(
       form.state.adjuntos.map(async (file) => ({
         "@odata.type": "#microsoft.graph.fileAttachment",
         name: file.name,
@@ -37,6 +38,22 @@ export function useProveedoresMail(ticket: Ticket) {
         contentBytes: await fileToBasePA64(file),
       }))
     );
+
+    const ticketFileAttachments: GraphFileAttachment[] = await Promise.all(
+      ticketAttachments
+        .filter((archivo) => !archivo.isFolder)
+        .map(async (archivo) => {
+          const blob = await graph.ticketBiblioteca.getFileContent(archivo.id);
+          return {
+            "@odata.type": "#microsoft.graph.fileAttachment",
+            name: archivo.name,
+            contentType: blob.type || "application/octet-stream",
+            contentBytes: await fileToBasePA64(blob),
+          };
+        })
+    );
+
+    const attachments: GraphFileAttachment[] = [...manualAttachments, ...ticketFileAttachments];
 
     return {
       message: {

@@ -392,6 +392,16 @@ class BibliotecaBaseService {
     await this.graph.delete(`/drives/${this.driveId}/items/${itemId}`);
   }
 
+  async getFileContent(itemId: string): Promise<Blob> {
+    await this.ensureIds();
+
+    if (!itemId) {
+      throw new Error("itemId es requerido");
+    }
+
+    return this.graph.getBlob(`/drives/${this.driveId}/items/${itemId}/content`);
+  }
+
   async getFileById(itemId: string): Promise<Archivo> {
     await this.ensureIds();
 

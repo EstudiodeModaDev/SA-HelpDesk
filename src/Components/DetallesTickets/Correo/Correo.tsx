@@ -4,6 +4,7 @@ import type {
   CorreoErrors,
   correoState,
 } from "../../../Funcionalidades/ProveedoresNotifications/hooks/useProveedoresMailForm";
+import type { Archivo } from "../../../Models/Attachments";
 import RichTextBase64 from "../../RichTextBase64/RichTextBase64";
 import "../../NuevoTicket/NuevoTicket.css";
 import "./Correo.css";
@@ -18,9 +19,10 @@ type Props = {
   errors: CorreoErrors;
   handleAddFiles: (file: File[] | FileList) => void;
   handleRemoveFiles: (index: number) => void;
+  ticketAttachments?: Archivo[];
 };
 
-export default function CorreoModal({onClose, options, onSubmit, setField, state,  errors, handleAddFiles, handleRemoveFiles,}: Props) {
+export default function CorreoModal({onClose, options, onSubmit, setField, state,  errors, handleAddFiles, handleRemoveFiles, ticketAttachments = [],}: Props) {
   
   const onSendMail = React.useCallback(async () => {
     await onSubmit()
@@ -108,6 +110,21 @@ export default function CorreoModal({onClose, options, onSubmit, setField, state
             <div className="ntk-section__head">
               <h3 className="ntk-section__title">Adjuntos</h3>
             </div>
+
+            {ticketAttachments.length > 0 && (
+              <div className="correo-modal__ticket-attachments">
+                <span className="ntk-label">
+                  Adjuntos del ticket (se incluirán automáticamente)
+                </span>
+                <ul className="attachment-list" role="list">
+                  {ticketAttachments.map((archivo, i) => (
+                    <li key={`${archivo.id}-${i}`} className="attachment-item">
+                      <span className="attachment-link__text">{archivo.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             <div className="correo-modal__dropzone">
               <FilesAdmin

@@ -78,6 +78,20 @@
   font-weight: 700;
 }
 
+.correo-modal__ticket-attachments {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 14px 18px;
+  border: 1px solid var(--bd);
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-elev) 92%, transparent);
+}
+
+.correo-modal__ticket-attachments .attachment-list {
+  margin: 0;
+}
+
 .correo-modal__dropzone {
   display: grid;
   gap: 8px;

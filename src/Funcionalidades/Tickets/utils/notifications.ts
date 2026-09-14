@@ -1,7 +1,9 @@
+import { render } from "@react-email/render";
 import type { GraphRecipient } from "../../../graph/GraphRest";
 import type { Ticket } from "../../../Models/Tickets";
 import type { MailService } from "../../../services/Mail.service";
 import { toISODateTimeFlex } from "../../../utils/Date";
+import { TicketRejectedEmail } from "../emails/TicketRejectedEmail";
 import type { ApprovalTarget } from "./ticketApproval";
 
 const appUrl = import.meta.env.VITE_ENTORNO === "dev" ? "http://localhost:5173/" : "https://victorious-field-074e1b00f.7.azurestaticapps.net/";
@@ -189,12 +191,15 @@ export async function notifyTicketRejectedSolicitante(mail: MailService, ticket:
     throw new Error("notifyTicketRejectedSolicitante: correo del solicitante invalido");
   }
 
-  const body = `
-    <p>Hola ${ticket.Solicitante ?? ""},</p>
-    <p>Tu ticket ${ticket.ID} no fue aprobado por el jefe de zona.</p>
-    <p><strong>Espacio fisico:</strong> ${ticket.Title ?? "—"}</p>
-    <p><strong>Detalle:</strong> ${motivo ?? "No fue aprobado por el jefe de zona."}</p>
-  `.trim();
+  const body = await render(
+    TicketRejectedEmail({
+      solicitante: ticket.Solicitante ?? "",
+      ticketId: ticket.ID ?? "",
+      espacioFisico: ticket.Title ?? "—",
+      motivo: motivo || "No fue aprobado por el jefe de zona.",
+      ticketUrl: `${appUrl}tickets?ticketId=${ticket.ID}`,
+    })
+  );
 
   await mail.sendEmail({
     message: {

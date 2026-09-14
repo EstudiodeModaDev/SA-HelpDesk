@@ -41,7 +41,7 @@ export type TreeOption = {
  */
 export default function NuevoTicketForm() {
   const {Franquicias: FranquiciasSvc, ANS} = useGraphServices();
-  const {state, errors, submitting, categorias, subcategoriasAll, loadingCatalogos, permissionsLoading, setField, handleSubmit, files, addFiles, removeFile} = useNuevoTicketForm();
+  const {state, errors, submitting, categorias, subcategoriasAll, loadingCatalogos, permissionsLoading, isAdmin, setField, handleSubmit, files, addFiles, removeFile} = useNuevoTicketForm();
   const { franqOptions, loading: loadingFranq, error: franqError } = useFranquicias(FranquiciasSvc!);
   const { workersOptions, loadingWorkers, error: usersError } = useWorkers({ onlyEnabled: true });
   const {tiendaZonaOptions, loading: loadingTiendas} = useTiendasZonas()
@@ -193,7 +193,7 @@ export default function NuevoTicketForm() {
               <Select<UserOptionEx, false>
                 options={combinedOptions}
                 placeholder={
-                  loadingTiendas 
+                  loadingTiendas
                     ? "Cargando opciones…"
                     : "Buscar solicitante…"
                 }
@@ -203,13 +203,13 @@ export default function NuevoTicketForm() {
                   setField("Solicitante", opt?.label);
                 }}
                 classNamePrefix="rs"
-                isDisabled={submitting || loadingWorkers || loadingFranq}
+                isDisabled={submitting || loadingWorkers || loadingFranq || !isAdmin}
                 isLoading={loadingWorkers || loadingFranq}
                 components={{ Option }}
                 noOptionsMessage={() =>
                   usersError || franqError ? "Error cargando opciones" : "Sin coincidencias"
                 }
-                isClearable
+                isClearable={isAdmin}
               />
               {errors.Solicitante && <small className="ntk-error">{errors.Solicitante}</small>}
             </div>

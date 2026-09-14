@@ -52,7 +52,8 @@ const initialState: Ticket = {
 export function useNuevoTicketForm() {
   const graph = useGraphServices();
   const auth = useAuth();
-  const { groups, loading: permissionsLoading } = usePermissions();
+  const { groups, role, loading: permissionsLoading } = usePermissions();
+  const isAdmin = role === "Administrador";
   const attachmentsList = useTicketsAttachmentsList();
   const files = useFiles();
 
@@ -66,6 +67,14 @@ export function useNuevoTicketForm() {
 
   const setField = <K extends keyof Ticket>(k: K, v: Ticket[K]) =>
     setState((s) => ({ ...s, [k]: v }));
+
+  React.useEffect(() => {
+    if (isAdmin || permissionsLoading || !auth.account) return;
+    if (state.CorreoSolicitante) return;
+
+    setField("CorreoSolicitante", auth.account.username ?? "");
+    setField("Solicitante", auth.account.name ?? auth.account.username ?? "");
+  }, [isAdmin, permissionsLoading, auth.account, state.CorreoSolicitante]);
 
   const handleSubmit = async (e: React.FormEvent, ANS: string) => {
     e.preventDefault();
@@ -163,6 +172,7 @@ export function useNuevoTicketForm() {
     loadingCatalogos,
     errorCatalogos,
     permissionsLoading,
+    isAdmin,
     handleSubmit,
     setField,
     ...files,

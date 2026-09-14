@@ -148,6 +148,18 @@ export const navs: MenuItem[] = [
         autocollapse: true,
         permission: [PERMISSIONS.MANAGE_USERS],
       },
+      {
+        id: "renombrar-adjuntos",
+        label: "Renombrar adjuntos (temporal)",
+        section: "admin",
+        icon:
+          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5Z"/>
+          </svg>,
+        path: "/admin/renombrar-adjuntos",
+        autocollapse: true,
+        permission: [PERMISSIONS.MANAGE_USERS],
+      },
     ],
   },
 ];

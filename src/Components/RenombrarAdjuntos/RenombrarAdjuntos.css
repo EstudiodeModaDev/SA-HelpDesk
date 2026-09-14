@@ -1,0 +1,50 @@
+.ra-page {
+  display: grid;
+  gap: 20px;
+}
+
+.ra-helper {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border: 1px solid var(--bd);
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--surface-elev) 88%, transparent);
+}
+
+.ra-helper__badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, #b45309 40%, var(--bd));
+  background: color-mix(in oklab, #b45309 14%, transparent);
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ra-helper__title {
+  margin: 0;
+}
+
+.ra-helper__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ra-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ra-actions__count {
+  color: var(--muted);
+  font-size: 13px;
+}
+

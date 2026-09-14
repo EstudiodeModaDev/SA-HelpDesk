@@ -11,6 +11,7 @@ import HelpDeskForm from "../Components/HelpDesk/HelpDesk";
 import JefeZona from "../Components/JefeZona/JefeZona";
 import AprobacionesTickets from "../Components/Aprobaciones/Aprobaciones";
 import CargaMasivaTickets from "../Components/CargaMasivaTickets/CargaMasivaTickets";
+import RenombrarAdjuntos from "../Components/RenombrarAdjuntos/RenombrarAdjuntos";
 import { RequirePermission } from "./RequirePermission";
 
 export default function AppRoutes() {
@@ -28,6 +29,7 @@ export default function AppRoutes() {
       <Route path="/tiendasZonas" element={<RequirePermission><TiendasZonasForm /></RequirePermission>} />
       <Route path="/proveedores" element={<RequirePermission><Proveedor /></RequirePermission>} />
       <Route path="/jefes-zona" element={<RequirePermission><JefeZona /></RequirePermission>} />
+      <Route path="/admin/renombrar-adjuntos" element={<RequirePermission><RenombrarAdjuntos /></RequirePermission>} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );

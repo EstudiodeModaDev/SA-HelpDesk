@@ -260,9 +260,10 @@ class BibliotecaBaseService {
   async uploadFile(folderPath: string, file: File, name?: string): Promise<Archivo> {
     await this.ensureIds();
     
-    const ext = file.name.split(".")[1]
+    const dot = file.name.lastIndexOf(".");
+    const ext = dot > 0 ? file.name.slice(dot + 1) : "";
     const cleanFolder = (folderPath ?? "").replace(/^\/|\/$/g, "");
-    const fileName = name ? `${name}.${ext}` : file.name;
+    const fileName = name ? (ext ? `${name}.${ext}` : name) : file.name;
 
     const serverPath = cleanFolder.length > 0 ? `${cleanFolder}/${fileName}` : fileName;
 
@@ -314,6 +315,32 @@ class BibliotecaBaseService {
     const fullPath = parentPath
       ? `${parentPath}/${item.name}`
       : item.name; 
+
+    return {
+      id: item.id,
+      name: item.name,
+      webUrl: item.webUrl,
+      isFolder: !!item.folder,
+      size: item.size,
+      lastModified: item.lastModifiedDateTime,
+      childCount: item.folder?.childCount ?? undefined,
+      created: item.createdDateTime,
+      path: fullPath
+    };
+  }
+
+  async renameArchivoCompleto(archivo: Archivo, nuevoNombreCompleto: string): Promise<Archivo> {
+    await this.ensureIds();
+
+    const item = await this.graph.patch<any>(
+      `/drives/${this.driveId}/items/${archivo.id}`,
+      { name: nuevoNombreCompleto }
+    );
+
+    const parentPath = item.parentReference?.path ?? "";
+    const fullPath = parentPath
+      ? `${parentPath}/${item.name}`
+      : item.name;
 
     return {
       id: item.id,
